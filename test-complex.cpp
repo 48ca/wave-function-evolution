@@ -12,7 +12,14 @@ int old_complex(int argc, char** argv)
 	printf("Should read: %d + %di\n", a, b);
 	Complex co(a, b);
 	co.print();
-	printf("Done\n");
+
+	printf("Testing conjugate operator...\n");
+
+	int r = 3;
+	int i = 4;
+	printf("Should read: %d - %di\n", r , i);
+	Complex conj(r, i);
+	(~conj).print();
 
 	printf("Testing complex number addition...\n");
 
@@ -36,8 +43,6 @@ int old_complex(int argc, char** argv)
 
 	printf("Testing use of I...\n");
 	Complex_I.print();
-
-	printf("Done\n");
 
 	printf("Testing complex multiplication...\n");
 	printf(">>> Should read -1: ");

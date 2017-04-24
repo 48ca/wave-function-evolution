@@ -56,6 +56,8 @@ public:
 	void operator/= (const Complex&);
 	void operator^= (const Complex&);
 
+	Complex operator~ (void);
+
 	friend Complex operator+ (const Complex&, const Complex&);
 	friend Complex operator- (const Complex&, const Complex&);
 	friend Complex operator* (const Complex&, const Complex&);
@@ -67,14 +69,6 @@ public:
 	friend Complex operator* (const _complex&, const Complex&);
 	friend Complex operator/ (const _complex&, const Complex&);
 	friend Complex operator^ (const _complex&, const Complex&);
-
-	/* To implement:
-	 *	- Conjugation, Magnitude
-	 *	- Other operations that may use
-	 *	  implemented operations but should be
-	 *	  written by themselves to reduce
-	 *	  numerical instability
-	 */
 
 };
 

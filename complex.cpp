@@ -22,6 +22,14 @@ Complex::Complex(_complex const& z)
 	raw = z;
 }
 
+Complex Complex::operator~(void)
+{
+#ifndef USING_QUADMATH
+	return Complex(std::conj(raw));
+#else
+	return Complex(~raw);
+#endif
+}
 _float Complex::re() const
 {
 #ifndef USING_QUADMATH

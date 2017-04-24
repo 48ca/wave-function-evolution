@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
-#include <fftw3.h>
+// #include <fftw3.h>
+// Uncomment when necessary
 #include "complex.hpp"
 #include <cstdio>
 
