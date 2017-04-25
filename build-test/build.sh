@@ -1,14 +1,13 @@
 #!/bin/bash
 
 build() {
-	echo -e "\e[96mBuilding with $2...\e[0m "
+	echo -e "\e[96mBuilding with $2... \e[0m "
 	if [ -d $1 ]; then rm -r $1; fi
 	mkdir $1 && \
 	pushd $1 > /dev/null || return 1
 	cmake ../.. $3 > /dev/null || return 2
 	make > /dev/null || return 3
-	popd > /dev/null && \
-	rm -rf $1 || return 4
+	popd > /dev/null
 	return 0
 }
 

@@ -27,6 +27,6 @@ int main(int argc, char** argv)
 
 	free(history);
 
-    return 0;
+	return 0;
 
 }
