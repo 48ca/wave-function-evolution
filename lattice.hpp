@@ -15,11 +15,12 @@ public:
 class Lattice
 {
 public:
-	State* lattice;
 	Lattice();
 	Lattice(_float const& L,
 		unsigned int const& N,
 		_float const& dt);
+
+	State* lattice;
 
 	_float L;
 	unsigned int N;

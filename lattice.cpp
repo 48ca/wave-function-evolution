@@ -1,5 +1,9 @@
 #include "lattice.hpp"
 
+Lattice::Lattice()
+{
+	State* lattice = new State[N];
+}
 Lattice::Lattice(_float const& L, unsigned int const& N, _float const& dt)
 {
 	State* lattice = new State[N];
