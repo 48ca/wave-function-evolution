@@ -66,11 +66,8 @@ void Complex::im(_float const& r)
 
 _float Complex::magsq() const
 {
-#ifndef USING_QUADMATH
-	return pow(Re(raw), 2.0) + pow(Im(raw), 2.0);
-#else
-	return powq(Re(raw), 2.0) + powq(Im(raw), 2.0);
-#endif
+	Complex cpy(raw);
+	return (~cpy * cpy).re();
 }
 _float Complex::mag() const
 {

@@ -3,26 +3,27 @@
 
 #include "complex.hpp"
 
-class Lattice
-{
-public:
-	State[] lattice;
-	Lattice();
-	Lattice(const& unsigned _float L,
-		const& unsigned int N,
-		const& _float dt);
-
-	unsigned _float L;
-	unsigned int N;
-	_float dt;
-}
-
 class State
 {
 public:
 	Complex state;
-	inline _float probability();
+	State();
+	inline _float prob();
 	void evolve(_float const& dt);
-}
+};
+
+class Lattice
+{
+public:
+	State* lattice;
+	Lattice();
+	Lattice(_float const& L,
+		unsigned int const& N,
+		_float const& dt);
+
+	_float L;
+	unsigned int N;
+	_float dt;
+};
 
 #endif // LATTICE_H

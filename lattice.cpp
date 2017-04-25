@@ -1,6 +1,19 @@
 #include "lattice.hpp"
 
-Lattice::Lattice(const unsigned int L, const _float dt)
+Lattice::Lattice(_float const& L, unsigned int const& N, _float const& dt)
 {
-	State lattice[L] = new State[L];
+	State* lattice = new State[N];
+}
+
+State::State()
+{
+
+}
+void State::evolve(_float const& dt)
+{
+
+}
+_float State::prob()
+{
+	return state.magsq();
 }

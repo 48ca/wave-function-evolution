@@ -3,6 +3,7 @@
 // #include <fftw3.h>
 // Uncomment when necessary
 #include "complex.hpp"
+#include "lattice.hpp"
 #include <cstdio>
 
 using std::vector;

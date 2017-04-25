@@ -49,9 +49,10 @@ add_library(complex STATIC complex.cpp)
 if(HAS_QUADMATH_H)
 	target_link_libraries(complex quadmath)
 endif(HAS_QUADMATH_H)
+add_library(lattice STATIC lattice.cpp)
 
 add_executable(test-complex test-complex.cpp)
-target_link_libraries(test-complex -lm complex)
+target_link_libraries(test-complex -lm complex lattice)
 
 add_executable(evolve evolve.cpp)
 target_link_libraries(evolve -lm complex)

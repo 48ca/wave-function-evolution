@@ -13,3 +13,5 @@ Makefile
 *.so
 *.o
 *.tmp
+
+install_manifest.txt
