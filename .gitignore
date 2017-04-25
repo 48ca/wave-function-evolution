@@ -15,3 +15,5 @@ Makefile
 *.tmp
 
 install_manifest.txt
+
+*.swp
