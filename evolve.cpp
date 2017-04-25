@@ -1,15 +1,28 @@
-#include <string>
-#include <vector>
 // #include <fftw3.h>
 // Uncomment when necessary
 #include "complex.hpp"
 #include "lattice.hpp"
 #include <cstdio>
-
-using std::vector;
+#include <cstdlib>
 
 int main(int argc, char** argv)
 {
+
+	if(argc < 2) {
+		puts("usage: evolve <number of steps>");
+		return 1;
+	}
+
+	const int steps = atoi(argv[1]);
+
+	printf("Generating a history of %d lattice states\n", steps);
+	Lattice* history = new Lattice[steps];
+
+	// Initialize
+	//
+	// Evolve
+	//
+	// Analyze
 
     return 0;
 
