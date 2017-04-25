@@ -15,7 +15,8 @@ int main(int argc, char** argv)
 
 	const int steps = atoi(argv[1]);
 
-	printf("Generating a history of %d lattice states\n", steps);
+	printf("Generating a history of %d lattice states (%f MB)\n",
+			steps, ((float)((sizeof(Lattice)+1000*sizeof(Complex)) * steps))/(1e6));
 	Lattice* history = new Lattice[steps];
 
 	// Initialize
@@ -23,6 +24,8 @@ int main(int argc, char** argv)
 	// Evolve
 	//
 	// Analyze
+
+	free(history);
 
     return 0;
 
