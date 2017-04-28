@@ -50,7 +50,7 @@ int old_complex(int argc, char** argv)
 
 	printf("Testing Euler's equation...\n");
 	printf(">>> Should read 0: ");
-	((Complex(M_El)^(Complex_I * M_PIl)) + 1).print();
+	((Complex(M_E)^(Complex_I * M_PI)) + 1).print();
 
 
 	return 0;
