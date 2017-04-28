@@ -5,7 +5,7 @@ build() {
 	if [ -d $1 ]; then rm -r $1; fi
 	mkdir $1 && \
 	pushd $1 > /dev/null || return 1
-	cmake ../.. $3 > /dev/null || return 2
+	cmake ../ $3 > /dev/null || return 2
 	make > /dev/null || return 3
 	popd > /dev/null
 	return 0
