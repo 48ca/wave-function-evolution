@@ -28,8 +28,7 @@ public:
 	unsigned int N;
 	_float dt;
 
-	void evolve();
-	void evolve(_float const& dto);
+	void evolve(_float const& dto, Lattice* const& outputLattice);
 };
 
 #endif // LATTICE_H

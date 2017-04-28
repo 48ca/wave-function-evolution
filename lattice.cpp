@@ -1,6 +1,6 @@
 #include <string>
-#include "exprtk.hpp"
 #include "lattice.hpp"
+#include "libs/exprtk.hpp"
 
 Lattice::Lattice()
 {
@@ -10,11 +10,7 @@ Lattice::Lattice(_float const& L, unsigned int const& N, _float const& dt)
 {
 	lattice = new State[N];
 }
-void Lattice::evolve()
-{
-
-}
-void Lattice::evolve(_float const& dto)
+void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 {
 
 }

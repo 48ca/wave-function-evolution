@@ -17,3 +17,6 @@ Makefile
 install_manifest.txt
 
 *.swp
+
+*.exe
+*.dll
