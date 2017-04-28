@@ -14,6 +14,10 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 {
 
 }
+void Lattice::evolve()
+{
+	for(unsigned i=0; i<N; ++i){lattice[i].evolve(dt);}
+}
 
 State::State()
 {
