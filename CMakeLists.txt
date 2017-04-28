@@ -46,6 +46,12 @@ endif(NOT NO_QUADMATH)
 
 ########## End libquadmath
 
+########## Argument handler
+
+add_library(handle STATIC libs/handle.c)
+
+########## End argument handler
+
 
 add_library(complex STATIC complex.cpp)
 if(HAS_QUADMATH_H)
@@ -57,7 +63,7 @@ add_executable(test-complex test-complex.cpp)
 target_link_libraries(test-complex -lm complex lattice)
 
 add_executable(evolve evolve.cpp)
-target_link_libraries(evolve -lm complex lattice)
+target_link_libraries(evolve -lm complex lattice handle)
 # TODO add back ${FFTW_LIBRARIES} to linked libraries when necessary
 
 install(TARGETS evolve DESTINATION bin)
