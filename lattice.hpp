@@ -3,14 +3,20 @@
 
 #include <string>
 #include "complex.hpp"
+#include "libs/exprtk.hpp"
 
 class State
 {
 public:
 	Complex state;
 	State();
-	State(_float const& xi, std::string const& expr, std::string const& expi);
+	State(_float const& x, std::string const& expra, std::string const& expia);
+	
 	inline _float prob();
+	
+	_float xi;
+	exprtk::symbol_table<_float> expr;
+	exprtk::symbol_table<_float> expi;
 	void evolve(_float const& dt);
 };
 
@@ -29,6 +35,7 @@ public:
 	_float dt;
 
 	void evolve(_float const& dto, Lattice* const& outputLattice);
+	void evolve();
 };
 
 #endif // LATTICE_H
