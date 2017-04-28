@@ -1,11 +1,14 @@
 #!/bin/bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+pushd $DIR > /dev/null
+
 build() {
 	echo -e "\e[96mBuilding with $2... \e[0m "
 	if [ -d $1 ]; then rm -r $1; fi
 	mkdir $1 && \
 	pushd $1 > /dev/null || return 1
-	cmake ../ $3 > /dev/null || return 2
+	cmake ../.. $3 > /dev/null || return 2
 	make > /dev/null || return 3
 	popd > /dev/null
 	return 0
@@ -37,3 +40,5 @@ build default "default settings" || check $?
 build noquadmath "no quadmath" "-DNO_QUADMATH=True" || check $?
 
 echo -e "\e[92mAll builds completed\e[0m"
+
+popd > /dev/null
