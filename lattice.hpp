@@ -36,7 +36,6 @@ public:
 
 	void evolve();
 	void evolve(_float const& dto, Lattice* const& outputLattice);
-	void evolve();
 };
 
 #endif // LATTICE_H
