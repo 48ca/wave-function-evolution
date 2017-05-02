@@ -11,12 +11,22 @@ typedef long double _float;
 #define Re(Z) Z.real()
 #define Im(Z) Z.imag()
 
+const _complex RawComplex_I = li;
+
+#define Sqrt(Z) std::sqrt(Z)
+#define Exp(Z) std::exp(Z)
+
 #else
 
 #include <quadmath.h>
 
 typedef __complex128 _complex;
 typedef __float128 _float;
+
+#define Sqrt(Z) csqrtq(Z)
+#define Exp(Z) cexpq(Z)
+
+const _complex RawComplex_I = csqrtq(1);
 
 #define Re(Z) __real__ Z
 #define Im(Z) __imag__ Z

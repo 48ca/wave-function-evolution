@@ -6,14 +6,16 @@
 #include <cstdlib>
 #include "libs/handle.h"
 
-#define DEFAULT_STEPS 1000
+#define DEFAULT_STEPS 100
+#define DEFAULT_LATTICE_SIZE 100
 
 int main(int argc, char** argv)
 {
 
-	char* filename     = setDefaultArgument((char*)"infile");
-	char* historySize  = addArgument((char*)"Number of steps", TAKES_ONE_ARGUMENT, (char*)"-n", NULL);
-	char* helpOption   = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
+	char* filename           = setDefaultArgument((char*)"infile");
+	char* historySizeOption  = addArgument((char*)"Number of steps", TAKES_ONE_ARGUMENT, (char*)"-n", (char*)"--steps");
+	char* latticeSizeOption  = addArgument((char*)"Size of lattice", TAKES_ONE_ARGUMENT, (char*)"-s", (char*)"--size");
+	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
 
 	int argError;
 	argError = handle(argc, argv);
@@ -33,34 +35,44 @@ int main(int argc, char** argv)
 
 	int steps = 0;
 	// steps defines the number of times the program will evolve our lattice
-	if(argSet(historySize)) {
-		steps = atoi(historySize);
+	if(argSet(historySizeOption)) {
+		steps = atoi(historySizeOption);
 	}
 	if(steps == 0) steps = DEFAULT_STEPS;
+	unsigned int latticeSize = 0;
+	if(argSet(latticeSizeOption)) {
+		latticeSize = atoi(latticeSizeOption);
+	}
+	if(latticeSize == 0) latticeSize = DEFAULT_LATTICE_SIZE;
 
 	printf("Generating a history of %d lattice states (%f MB)\n",
 			steps, ((float)((sizeof(Lattice)+1000*sizeof(Complex)) * steps))/(1e6));
 
 	Lattice* history = new Lattice[steps + 1];
+	register int i;
+	for(i = 0; i < steps + 1; ++i)
+		history[i].initialize(0, latticeSize, 0);
 
 	// Initialize
 
 	_float timestep = 0.01; // Something
 	// Set initial lattice (*history);
 
+	puts("Setting initial state...");
+	history->setInitialState(.01);
+
 	// Evolve
 
 	puts("Evolving...");
 
-	register int i;
 	Lattice* prev = history;
-	size_t latticeSize = sizeof(Lattice);
-	Lattice* curr = history + latticeSize;
+	size_t latticeTypeSize = sizeof(Lattice);
+	Lattice* curr = history + latticeTypeSize;
 	for(i=0;i<steps;++i)
 	{
 		curr->evolve(timestep, prev);
 		prev = curr;
-		curr += latticeSize;
+		curr += latticeTypeSize;
 	}
 
 	// Analyze
