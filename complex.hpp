@@ -11,7 +11,7 @@ typedef long double _float;
 #define Re(Z) Z.real()
 #define Im(Z) Z.imag()
 
-const _complex RawComplex_I = li;
+const _complex RawComplex_I(0.0,1.0);
 
 #define Sqrt(Z) std::sqrt(Z)
 #define Exp(Z) std::exp(Z)

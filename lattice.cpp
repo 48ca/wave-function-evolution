@@ -47,10 +47,11 @@ void Lattice::setInitialState(_float dx)
 {
 	_complex xavg = .5 * latticeSize;
 	_complex p = 1;
-	register unsigned int i, x;
+	register unsigned int i;
+	_complex x;
 	for(i=0;i<latticeSize;++i)
 	{
-		x = i;
+		x = _complex(i);
 		lattice[i].state = Complex(1 / Sqrt(2 * M_PI * dx * dx) * Exp( -(x - xavg) * (x - xavg) / ( dx * dx ) + RawComplex_I * p * x / HBAR));
 		lattice[i].state.print();
 	}
