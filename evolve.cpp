@@ -55,11 +55,11 @@ int main(int argc, char** argv)
 
 	// Initialize
 
-	_float timestep = 0.01; // Something
+	_float timestep = 1; // Something
 	// Set initial lattice (*history);
 
 	puts("Setting initial state...");
-	history->setInitialState(.01);
+	history->setInitialState(timestep);
 
 	// Evolve
 
