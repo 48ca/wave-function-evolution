@@ -43,6 +43,8 @@ public:
 	void evolve(_float const& dto, Lattice* const& outputLattice);
 
 	void setInitialState(_float);
+
+	int writeLattice(char* filename);
 };
 
 #endif // LATTICE_H

@@ -1,6 +1,8 @@
 #ifndef COMPLEX_WRAPPER_H
 #define COMPLEX_WRAPPER_H
 
+#include <cstdio>
+
 #ifndef USING_QUADMATH
 
 #include <complex>
@@ -49,6 +51,7 @@ public:
 	Complex(_complex const&);
 
 	void print() const;
+	void printCompact(FILE*) const;
 
 	_float magsq() const;
 	_float mag() const;

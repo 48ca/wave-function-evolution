@@ -99,6 +99,27 @@ void Complex::print() const
 
 }
 
+void Complex::printCompact(FILE* f) const
+{
+
+#ifndef USING_QUADMATH
+
+	fprintf(f, "%.20Le + %.20Lei", Re(raw), Im(raw));
+
+#else
+
+	int width = 20;
+
+	char real_buf[PRINT_BUFFER_SIZE];
+	char im_buf[PRINT_BUFFER_SIZE];
+	quadmath_snprintf(real_buf, PRINT_BUFFER_SIZE, "%#*.20Qe", width, Re(raw));
+	quadmath_snprintf(im_buf, PRINT_BUFFER_SIZE, "%#*.20Qe", width, Im(raw));
+	fprintf(f, "%s + %si", real_buf, im_buf);
+
+#endif
+
+}
+
 void Complex::operator=(Complex const& other)
 {
 	this->raw = other.raw;

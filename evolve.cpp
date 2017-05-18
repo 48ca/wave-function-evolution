@@ -53,9 +53,11 @@ int main(int argc, char** argv)
 	for(i = 0; i < steps + 1; ++i)
 		history[i].initialize(0, latticeSize, 0);
 
+	puts("Finished allocating memory");
+
 	// Initialize
 
-	_float timestep = 1; // Something
+	_float timestep = .01; // Something
 	// Set initial lattice (*history);
 
 	puts("Setting initial state...");
@@ -74,6 +76,8 @@ int main(int argc, char** argv)
 		prev = curr;
 		curr += latticeTypeSize;
 	}
+
+	// history[0].writeLattice((char*)"out.txt");
 
 	// Analyze
 

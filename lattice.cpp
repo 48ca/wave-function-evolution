@@ -56,3 +56,21 @@ void Lattice::setInitialState(_float dx)
 		lattice[i].state.print();
 	}
 }
+int Lattice::writeLattice(char* filename)
+{
+	FILE* f = fopen(filename, "w");
+	if(f == NULL)
+	{
+		fprintf(stderr, "Cannot write to %s\n", filename);
+		return 1;
+	}
+
+	register unsigned int i;
+	for(i=0;i<latticeSize;++i)
+	{
+		lattice[i].state.printCompact(f);
+		fprintf(f,",");
+	}
+
+	return 0;
+}
