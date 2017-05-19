@@ -38,10 +38,9 @@ def plot(r):
     ax = fig.add_subplot(1,1,1)
     re, = ax.plot(hist['re'][0])
     fig.canvas.draw()
-    sleep(1)
-    re.set_ydata(hist['im'][0])
-    fig.canvas.draw()
-    sleep(1)
+    for p in hist['re']:
+        re.set_ydata(p)
+        fig.canvas.draw()
 
 with open(sys.argv[1], 'r') as f:
     plot(csv.reader(f))

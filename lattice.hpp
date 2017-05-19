@@ -18,7 +18,6 @@ public:
 	_float xi;
 	exprtk::symbol_table<_float> expr;
 	exprtk::symbol_table<_float> expi;
-	void evolve(_float const& dt);
 };
 
 class Lattice

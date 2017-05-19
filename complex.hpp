@@ -57,9 +57,9 @@ public:
 	_float mag() const;
 
 	/* Component assignments */
-	inline _float re() const;
+	_float re() const;
 	void re(_float const&);
-	inline _float im() const;
+	_float im() const;
 	void im(_float const&);
 
 	void operator=  (const Complex&);

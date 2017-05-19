@@ -55,9 +55,6 @@ int main(int argc, char** argv)
 			steps, ((float)((sizeof(Lattice)+1000*sizeof(Complex)) * steps))/(1e6));
 
 	Lattice* history = new Lattice[steps + 1];
-	register int i;
-	for(i = 0; i < steps + 1; ++i)
-		history[i].initialize(0, latticeSize, 0);
 
 	puts("Finished allocating memory");
 
@@ -67,21 +64,30 @@ int main(int argc, char** argv)
 	// Set initial lattice (*history);
 
 	puts("Setting initial state...");
+	history->initialize(0, latticeSize, 0);
 	history->setInitialState(timestep);
 
 	// Evolve
 
 	puts("Evolving...");
 
-	Lattice* prev = history;
-	size_t latticeTypeSize = sizeof(Lattice);
-	Lattice* curr = history + latticeTypeSize;
+	Lattice* curr = &(history[0]);
+	Lattice* next = NULL;
+	printf("\n");
+	register int i;
 	for(i=0;i<steps;++i)
 	{
-		curr->evolve(timestep, prev);
-		prev = curr;
-		curr += latticeTypeSize;
+		next = &(history[1+i]);
+		next->initialize(0, latticeSize, 0);
+
+		curr->evolve(timestep, next);
+
+		curr = next;
+
+		printf("\rSteps: %05d", i);
+		fflush(stdout);
 	}
+	printf("\n");
 
 	FILE* f = fopen(outputFilename, "w");
 	if(f == NULL)
@@ -96,8 +102,6 @@ int main(int argc, char** argv)
 	}
 
 	// Analyze
-
-	free(history);
 
 	return 0;
 
