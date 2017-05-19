@@ -131,7 +131,7 @@ int handle(int argc, char** argv) {
 		for(j = 0; j < numOptionsSpecified; ++j) {
 			if(argv[i][0] != '-') {
 				if(defaultArg == NULL) {
-					fprintf(stderr, "Argument '%s' was passed without an option, and no default argument has been set\n", argv[0]);
+					fprintf(stderr, "Unrecognized argument '%s'\n", argv[i]);
 					return 1;
 				}
 				if(defaultArg[0] != '\0') {

@@ -8,11 +8,13 @@
 
 #define DEFAULT_STEPS 100
 #define DEFAULT_LATTICE_SIZE 100
+#define DEFAULT_OUTFILE (char*)"out.txt"
 
 int main(int argc, char** argv)
 {
 
-	char* filename           = setDefaultArgument((char*)"infile");
+	// char* filename           = setDefaultArgument((char*)"Output filename");
+	char* outputFilename     = addArgument((char*)"Output filename", TAKES_ONE_ARGUMENT, (char*)"-o", (char*)"--out");
 	char* historySizeOption  = addArgument((char*)"Number of steps", TAKES_ONE_ARGUMENT, (char*)"-n", (char*)"--steps");
 	char* latticeSizeOption  = addArgument((char*)"Size of lattice", TAKES_ONE_ARGUMENT, (char*)"-s", (char*)"--size");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
@@ -20,7 +22,7 @@ int main(int argc, char** argv)
 	int argError;
 	argError = handle(argc, argv);
 	if(argError) {
-		fprintf(stderr, "Run `evolve --help` for more information");
+		fprintf(stderr, "Run `evolve --help` for more information\n");
 		return argError;
 	}
 
@@ -29,8 +31,12 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	if(argSet(filename)) {
-		// Lattice file specified
+	if(argSet(outputFilename)) {
+		// Output specified
+		printf("Writing output to %s\n", outputFilename);
+	} else {
+		free(outputFilename);
+		outputFilename = DEFAULT_OUTFILE;
 	}
 
 	int steps = 0;
@@ -77,7 +83,17 @@ int main(int argc, char** argv)
 		curr += latticeTypeSize;
 	}
 
-	// history[0].writeLattice((char*)"out.txt");
+	FILE* f = fopen(outputFilename, "w");
+	if(f == NULL)
+	{
+		fprintf(stderr, "Cannot write to %s\n", outputFilename);
+		return 1;
+	}
+	for(i = 0; i < steps + 1; ++i)
+	{
+		history[i].writeLattice(f);
+		fprintf(f, "\n");
+	}
 
 	// Analyze
 

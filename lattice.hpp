@@ -4,6 +4,7 @@
 #include <string>
 #include "complex.hpp"
 #include "libs/exprtk.hpp"
+#include <cstdio>
 
 class State
 {
@@ -44,7 +45,7 @@ public:
 
 	void setInitialState(_float);
 
-	int writeLattice(char* filename);
+	int writeLattice(FILE* f);
 };
 
 #endif // LATTICE_H
