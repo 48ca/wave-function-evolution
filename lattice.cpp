@@ -34,8 +34,9 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 		);
 	}
 }
-void Lattice::evolve()
+Lattice::~Lattice()
 {
+	delete [] lattice;
 }
 
 State::State()

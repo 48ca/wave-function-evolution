@@ -28,6 +28,8 @@ public:
 		unsigned int const& N,
 		_float const& dt);
 
+	~Lattice();
+
 	void initialize(_float const& L,
 		unsigned int const& N,
 		_float const& dt);
@@ -39,7 +41,6 @@ public:
 	unsigned int N;
 	_float dt;
 
-	void evolve();
 	void evolve(_float const& dto, Lattice* const& outputLattice);
 
 	void setInitialState(_float);

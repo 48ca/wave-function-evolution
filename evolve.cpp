@@ -51,8 +51,8 @@ int main(int argc, char** argv)
 	}
 	if(latticeSize == 0) latticeSize = DEFAULT_LATTICE_SIZE;
 
-	printf("Generating a history of %d lattice states (%f MB)\n",
-			steps, ((float)((sizeof(Lattice)+1000*sizeof(Complex)) * steps))/(1e6));
+	// printf("Generating a history of %d lattice states (%f MB)\n",
+	//  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
 
 	Lattice* history = new Lattice[steps + 1];
 
@@ -74,6 +74,15 @@ int main(int argc, char** argv)
 	Lattice* curr = &(history[0]);
 	Lattice* next = NULL;
 	printf("\n");
+
+
+	FILE* f = fopen(outputFilename, "w");
+	if(f == NULL)
+	{
+		fprintf(stderr, "Cannot write to %s\n", outputFilename);
+		return 1;
+	}
+
 	register int i;
 	for(i=0;i<steps;++i)
 	{
@@ -82,24 +91,19 @@ int main(int argc, char** argv)
 
 		curr->evolve(timestep, next);
 
+		if(i % 5 == 0) {
+			history[i].writeLattice(f);
+			fprintf(f, "\n");
+		}
+
+		delete [] curr->lattice;
+
 		curr = next;
 
 		printf("\rSteps: %05d", i);
 		fflush(stdout);
 	}
 	printf("\n");
-
-	FILE* f = fopen(outputFilename, "w");
-	if(f == NULL)
-	{
-		fprintf(stderr, "Cannot write to %s\n", outputFilename);
-		return 1;
-	}
-	for(i = 0; i < steps + 1; ++i)
-	{
-		history[i].writeLattice(f);
-		fprintf(f, "\n");
-	}
 
 	// Analyze
 
