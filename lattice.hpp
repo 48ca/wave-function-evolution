@@ -25,14 +25,12 @@ class Lattice
 public:
 	Lattice();
 	Lattice(_float const& L,
-		unsigned int const& N,
-		_float const& dt);
+		unsigned int const& N);
 
 	~Lattice();
 
 	void initialize(_float const& L,
-		unsigned int const& N,
-		_float const& dt);
+		unsigned int const& N);
 
 	State* lattice;
 	unsigned int latticeSize;
@@ -40,6 +38,9 @@ public:
 	_float L;
 	unsigned int N;
 	_float dt;
+
+	void normalize();
+	_float probability();
 
 	void evolve(_float const& dto, Lattice* const& outputLattice);
 

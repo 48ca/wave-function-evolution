@@ -8,12 +8,12 @@ Lattice::Lattice()
 	latticeSize = 0;
 	lattice = NULL;
 }
-Lattice::Lattice(_float const& L, unsigned int const& N, _float const& dt)
+Lattice::Lattice(_float const& L, unsigned int const& N)
 {
 	latticeSize = N;
 	lattice = new State[N];
 }
-void Lattice::initialize(_float const& L, unsigned int const& N, _float const& dt)
+void Lattice::initialize(_float const& L, unsigned int const& N)
 {
 	latticeSize = N;
 	lattice = new State[N];
@@ -25,14 +25,34 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 	for(i=1; i<latticeSize-1; ++i)
 	{
 		// No potential
-		Complex d2dx2( ( lattice[i+1].state + lattice[i-1].state - 2 * lattice[i].state ) / dto / dto );
-		_float dbdt = HBAR/(2 * m) * d2dx2.re();
-		_float dadt = -HBAR/(2 * m) * d2dx2.im();
+		Complex d2dx2( ( lattice[i+1].state + lattice[i-1].state - 2 * lattice[i].state ) );
+		_float dbdt = 2 * d2dx2.re();
+		_float dadt = 2 * d2dx2.im();
 		outputLattice->lattice[i].state = Complex(
 				lattice[i].state.re() + dadt,
 				lattice[i].state.im() + dbdt
 		);
 	}
+	outputLattice->normalize();
+}
+void Lattice::normalize()
+{
+	_float prob = this->probability();
+	register unsigned int i;
+	for(i=1; i<latticeSize-1; ++i)
+	{
+		lattice[i].state /= prob;
+	}
+}
+_float Lattice::probability()
+{
+	register _float prob = 0.0;
+	register unsigned int i;
+	for(i=1; i<latticeSize-1; ++i)
+	{
+		prob += lattice[i].prob();
+	}
+	return prob;
 }
 Lattice::~Lattice()
 {
@@ -53,14 +73,18 @@ _float State::prob()
 }
 void Lattice::setInitialState(_float dx)
 {
-	_complex xavg = .5 * latticeSize;
-	_complex p = 1;
 	register unsigned int i;
-	_complex x;
+	_float x;
+	_float amp;
+
+	_float latticeWidth = 1.0;
+
 	for(i=0;i<latticeSize;++i)
 	{
-		x = _complex(i);
-		lattice[i].state = Complex(1 / Sqrt(2 * M_PI * dx * dx) * Exp( -(x - xavg) * (x - xavg) / ( dx * dx ) + RawComplex_I * p * x / HBAR));
+		x = (i - latticeSize/2) * latticeWidth;
+		amp = Re(Exp(-1 * x*x / (2 * dx *  dx))) * 1 / Re(Sqrt(Sqrt(M_PI) * dx));
+		lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
+		// lattice[i].state = Complex(amp);
 		// lattice[i].state.print();
 	}
 }

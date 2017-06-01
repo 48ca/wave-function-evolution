@@ -16,10 +16,11 @@ def plot(r):
     hist = {
         're': [],
         'im': [],
-        'co': []
+        'co': [],
+        'pr': []
     }
     for i, row in enumerate(r):
-        for t in ['re', 'im', 'co']:
+        for t in ['re', 'im', 'co', 'pr']:
             hist[t].append([])
         for c in row:
             if c == '':
@@ -32,13 +33,14 @@ def plot(r):
             hist['re'][i].append(re)
             hist['im'][i].append(im)
             hist['co'][i].append(complex(re, im))
+            hist['pr'][i].append(re*re - im*im)
 
     plt.ion()
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
-    re, = ax.plot(hist['re'][0])
+    re, = ax.plot(hist['pr'][0])
     fig.canvas.draw()
-    for p in hist['re']:
+    for p in hist['pr']:
         re.set_ydata(p)
         fig.canvas.draw()
 

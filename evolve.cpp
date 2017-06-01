@@ -60,12 +60,12 @@ int main(int argc, char** argv)
 
 	// Initialize
 
-	_float timestep = .01; // Something
+	_float timestep = .1; // Something
 	// Set initial lattice (*history);
 
 	puts("Setting initial state...");
-	history->initialize(0, latticeSize, 0);
-	history->setInitialState(timestep);
+	history->initialize(0, latticeSize);
+	history->setInitialState(0.1);
 
 	// Evolve
 
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
 	for(i=0;i<steps;++i)
 	{
 		next = &(history[1+i]);
-		next->initialize(0, latticeSize, 0);
+		next->initialize(0, latticeSize);
 
 		curr->evolve(timestep, next);
 

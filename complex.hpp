@@ -17,6 +17,8 @@ const _complex RawComplex_I(0.0,1.0);
 
 #define Sqrt(Z) std::sqrt(Z)
 #define Exp(Z) std::exp(Z)
+#define Cos(Z) std::cos(Z)
+#define Sin(Z) std::sin(Z)
 
 #else
 
@@ -27,6 +29,8 @@ typedef __float128 _float;
 
 #define Sqrt(Z) csqrtq(Z)
 #define Exp(Z) cexpq(Z)
+#define Cos(Z) ccosq(Z)
+#define Sin(Z) csinq(Z)
 
 const _complex RawComplex_I = csqrtq(1);
 
