@@ -89,8 +89,8 @@ void Lattice::setInitialState(_float dx)
 	{
 		_float x = (i - latticeSize/2) * latticeWidth/(_float)(latticeSize);
 		_float amp = Re(Exp(-1 * x*x / (2 * dx * dx))) / Re(Sqrt(Sqrt(PI) * dx));
-		// lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
-		lattice[i].state = Complex(amp);
+		lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
+		// lattice[i].state = Complex(amp);
 		// lattice[i].state.print();
 	}
 	lattice[0].state = Complex(0);

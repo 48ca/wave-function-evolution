@@ -12,6 +12,7 @@
 #define DEFAULT_WAVE_WIDTH 1.0
 #define DEFAULT_OUTFILE (char*)"out.txt"
 #define DEFAULT_TIMESTEP 0.05
+#define DEFAULT_WAVE_WRITE 10
 
 int main(int argc, char** argv)
 {
@@ -22,6 +23,7 @@ int main(int argc, char** argv)
 	char* latticeSizeOption  = addArgument((char*)"Size of lattice", TAKES_ONE_ARGUMENT, (char*)"-s", (char*)"--size");
 	char* latticeWidthOption = addArgument((char*)"Width of lattice", TAKES_ONE_ARGUMENT, (char*)"-w", (char*)"--width");
 	char* waveWidthOption    = addArgument((char*)"Width of the wave", TAKES_ONE_ARGUMENT, (char*)"-g", (char*)"--gauss");
+	char* waveWriteOption    = addArgument((char*)"Waves until write", TAKES_ONE_ARGUMENT, (char*)"-u", (char*)"--wuw");
 	char* timestepOption     = addArgument((char*)"Timestep", TAKES_ONE_ARGUMENT, (char*)"-t", (char*)"--timestep");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
 
@@ -76,6 +78,12 @@ int main(int argc, char** argv)
 	}
 	if(waveWidth <= 0) waveWidth = DEFAULT_WAVE_WIDTH;
 
+	int waveWrite = 0;
+	if(argSet(waveWriteOption)) {
+		waveWrite = atoi(waveWriteOption);
+	}
+	if(waveWrite <= 0) waveWrite = DEFAULT_WAVE_WRITE;
+
 	// printf("Generating a history of %d lattice states (%f MB)\n",
 	//  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
 
@@ -94,6 +102,7 @@ int main(int argc, char** argv)
 	// Evolve
 
 	puts("Evolving...");
+	printf("Writing every %d evolutions\n", waveWrite);
 
 	Lattice* curr = &(history[0]);
 	Lattice* next = NULL;
@@ -115,7 +124,7 @@ int main(int argc, char** argv)
 
 		curr->evolve(timestep, next);
 
-		if(i % 5 == 0) {
+		if(i % waveWrite == 0) {
 			history[i].writeLattice(f);
 			fprintf(f, "\n");
 		}
@@ -126,7 +135,7 @@ int main(int argc, char** argv)
 		delete [] curr->lattice;
 		curr = next;
 
-		printf("\rSteps: %05d : prob %s", i, prob);
+		printf("\rSteps: %09d : prob %s", i, prob);
 		fflush(stdout);
 	}
 	printf("\n");
