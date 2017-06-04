@@ -98,12 +98,12 @@ void Complex::print() const
 
 }
 
-void printFloat(_float f) const
+void printFloat(_float f)
 {
 
 #ifndef USING_QUADMATH
 
-	printf("%Lf\n", f);
+	printf("%Le\n", f);
 
 #else
 
