@@ -3,7 +3,6 @@
 
 #define PRINT_BUFFER_SIZE 128
 
-
 Complex::Complex()
 {
 	raw = 0;
@@ -198,3 +197,7 @@ Complex operator^ (const Complex& a, const Complex& b)
 	return Complex(cpowq(a.raw, b.raw));
 #endif
 }
+
+#ifdef USING_QUADMATH
+_complex RawComplex_I = 0 + csqrtq(-1);
+#endif

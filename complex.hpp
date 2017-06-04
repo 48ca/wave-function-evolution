@@ -13,8 +13,6 @@ typedef long double _float;
 #define Re(Z) std::real(Z)
 #define Im(Z) std::imag(Z)
 
-const _complex RawComplex_I = _complex(0.0,1.0);
-
 #define Sqrt(Z) std::sqrt(Z)
 #define Exp(Z) std::exp(Z)
 #define Cos(Z) std::cos(Z)
@@ -31,8 +29,6 @@ typedef __float128 _float;
 #define Exp(Z) cexpq(Z)
 #define Cos(Z) ccosq(Z)
 #define Sin(Z) csinq(Z)
-
-const _complex RawComplex_I = csqrtq(1);
 
 #define Re(Z) __real__ Z
 #define Im(Z) __imag__ Z
@@ -89,6 +85,11 @@ class Complex
 
 };
 
+#ifndef USING_QUADMATH
+const _complex RawComplex_I = _complex(0.0,1.0);
+#else
+extern _complex RawComplex_I;
+#endif
 const Complex Complex_I = Complex(0, 1);
 
 #endif // COMPLEX_WRAPPER_H

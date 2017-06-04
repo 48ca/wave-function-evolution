@@ -44,6 +44,9 @@ int old_complex(int argc, char** argv)
 	printf("Testing use of I...\n");
 	Complex_I.print();
 
+	printf("Testing use of primitive I...\n");
+	Complex(RawComplex_I).print();
+
 	printf("Testing complex multiplication...\n");
 	printf(">>> Should read -1: ");
 	(Complex_I*Complex_I).print();
