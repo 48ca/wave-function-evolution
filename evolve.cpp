@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 
 		curr = next;
 
-		printf("\rSteps: %05d", i);
+		//printf("\rSteps: %05d", i);
 		fflush(stdout);
 	}
 	printf("\n");

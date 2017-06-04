@@ -2,6 +2,7 @@
 #include "lattice.hpp"
 #include "constants.hpp"
 #include <cstdio>
+#include <iostream>
 
 Lattice::Lattice()
 {
@@ -42,8 +43,8 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 void Lattice::normalize()
 {
 	this->probability();
-	_float div = Re(Sqrt(prob/latticeSize));
 	register unsigned int i;
+	_float div = Re(Sqrt(prob));
 
 #pragma omp parallel for
 	for(i=1; i<latticeSize-1; ++i)
@@ -59,6 +60,7 @@ void Lattice::probability()
 	{
 		prob += lattice[i].prob();
 	}
+	prob = prob/latticeSize;
 }
 Lattice::~Lattice()
 {
@@ -100,5 +102,6 @@ int Lattice::writeLattice(FILE* f)
 	}
 	lattice[latticeSize-1].state.printCompact(f);
 	//fprintf(f,":%ld",prob);
+	printf("%Lf\n",prob);
 	return 0;
 }

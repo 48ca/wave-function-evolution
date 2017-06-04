@@ -98,6 +98,25 @@ void Complex::print() const
 
 }
 
+void printFloat(_float f) const
+{
+
+#ifndef USING_QUADMATH
+
+	printf("%Lf\n", f);
+
+#else
+
+	int width = 20;
+
+	char real_buf[PRINT_BUFFER_SIZE];
+	quadmath_snprintf(real_buf, PRINT_BUFFER_SIZE, "%#*.20Qe", width, f);
+	printf("%s\n", real_buf);
+
+#endif
+
+}
+
 void Complex::printCompact(FILE* f) const
 {
 

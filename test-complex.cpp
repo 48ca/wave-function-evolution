@@ -5,23 +5,24 @@
 int old_complex(int argc, char** argv)
 {
 
-	printf("Testing complex number printing...\n");
+	/*printf("Testing complex number printing...\n");
 
 	int a = 60;
 	int b = 125;
 	printf("Should read: %d + %di\n", a, b);
 	Complex co(a, b);
-	co.print();
+	co.print();*/
 
-	printf("Testing conjugate operator...\n");
+	printf("Testing magsq...\n");
 
 	int r = 3;
 	int i = 4;
-	printf("Should read: %d - %di\n", r , i);
+	printf("Should read: %d\n", 25);
 	Complex conj(r, i);
-	(~conj).print();
+	//printf("%lf \n", conj.magsq());
+	Complex(conj.magsq()).print();
 
-	printf("Testing complex number addition...\n");
+	/*printf("Testing complex number addition...\n");
 
 	int c = 720;
 	int d = 230;
@@ -53,7 +54,7 @@ int old_complex(int argc, char** argv)
 
 	printf("Testing Euler's equation...\n");
 	printf(">>> Should read 0: ");
-	((Complex(M_E)^(Complex_I * M_PI)) + 1).print();
+	((Complex(M_E)^(Complex_I * M_PI)) + 1).print();*/
 
 
 	return 0;
