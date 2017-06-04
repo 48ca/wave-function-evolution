@@ -77,16 +77,14 @@ _float State::prob()
 void Lattice::setInitialState(_float dx)
 {
 	register unsigned int i;
-	_float x;
-	_float amp;
 
 	_float latticeWidth = 1.0;
 
 #pragma omp parallel for
 	for(i=0;i<latticeSize;++i)
 	{
-		x = (i - latticeSize/2) * latticeWidth;
-		amp = Re(Exp(-1 * x*x / (2 * dx *  dx))) * 1 / Re(Sqrt(Sqrt(M_PIq) * dx));
+		_float x = (i - latticeSize/2) * latticeWidth;
+		_float amp = Re(Exp(-1 * x*x / (2 * dx *  dx))) * 1 / Re(Sqrt(Sqrt(M_PIq) * dx));
 		lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
 		// lattice[i].state = Complex(amp);
 		// lattice[i].state.print();
