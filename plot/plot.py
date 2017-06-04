@@ -30,8 +30,8 @@ def plot(r):
         for t in ['re', 'im', 'co', 'pr']:
             hist[t].append([])
         for c in row:
+            if c == "": continue
             cstr = c.split(" + ")
-
             re = float(cstr[0])
             im = float(cstr[1].split("i")[0])
             hist['re'][i].append(re)

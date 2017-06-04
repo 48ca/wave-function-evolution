@@ -25,6 +25,8 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 {
     register unsigned int i;
     const _float m = 1;
+
+#pragma omp parallel for
     for(i=1; i<latticeSize-1; ++i)
     {
         // No potential
@@ -43,7 +45,8 @@ void Lattice::normalize()
     this->probability();
     _float div = Re(Sqrt(prob/latticeSize));
     register unsigned int i;
-    
+
+#pragma omp parallel for
     for(i=1; i<latticeSize-1; ++i)
     {
         lattice[i].state /= div;
@@ -79,6 +82,7 @@ void Lattice::setInitialState(_float dx)
 
     _float latticeWidth = 1.0;
 
+#pragma omp parallel for
     for(i=0;i<latticeSize;++i)
     {
         x = (i - latticeSize/2) * latticeWidth;
