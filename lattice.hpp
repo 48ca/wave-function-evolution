@@ -18,15 +18,15 @@ class Lattice
 	public:
 		Lattice();
 		Lattice(_float const& L,
-				unsigned int const& N);
+				int const& N);
 
 		~Lattice();
 
 		void initialize(_float const& L,
-				unsigned int const& N);
+				int const& N);
 
 		State* lattice;
-		unsigned int latticeSize;
+		int latticeSize;
 
 		_float latticeWidth;
 		_float prob;

@@ -10,14 +10,14 @@ Lattice::Lattice()
 	lattice = NULL;
 	prob = 0;
 }
-Lattice::Lattice(_float const& L, unsigned int const& N)
+Lattice::Lattice(_float const& L, int const& N)
 {
 	latticeWidth = L;
 	latticeSize = N;
 	lattice = new State[N];
 	prob = 0;
 }
-void Lattice::initialize(_float const& L, unsigned int const& N)
+void Lattice::initialize(_float const& L, int const& N)
 {
 	latticeWidth = L;
 	latticeSize = N;
@@ -26,7 +26,7 @@ void Lattice::initialize(_float const& L, unsigned int const& N)
 }
 void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 {
-	register unsigned int i;
+	register int i;
 
 #pragma omp parallel for
 	for(i=1; i<latticeSize-1; ++i)
@@ -48,7 +48,7 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 void Lattice::normalize()
 {
 	this->probability();
-	register unsigned int i;
+	register int i;
 	_float div = Re(Sqrt(prob));
 
 #pragma omp parallel for
@@ -60,7 +60,7 @@ void Lattice::normalize()
 void Lattice::probability()
 {
 	prob = 0.0;
-	register unsigned int i;
+	register int i;
 	for(i=1; i<latticeSize-1; ++i)
 	{
 		prob += lattice[i].prob();
@@ -82,15 +82,15 @@ _float State::prob()
 }
 void Lattice::setInitialState(_float dx)
 {
-	register unsigned int i;
+	register int i;
 
 #pragma omp parallel for
 	for(i=1;i<latticeSize-1;++i)
 	{
-		_float x = (i - latticeSize/2) * latticeWidth/latticeSize;
+		_float x = (i - latticeSize/2) * latticeWidth/(_float)(latticeSize);
 		_float amp = Re(Exp(-1 * x*x / (2 * dx * dx))) / Re(Sqrt(Sqrt(PI) * dx));
-		lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
-		// lattice[i].state = Complex(amp);
+		// lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
+		lattice[i].state = Complex(amp);
 		// lattice[i].state.print();
 	}
 	lattice[0].state = Complex(0);
@@ -100,7 +100,7 @@ void Lattice::setInitialState(_float dx)
 }
 int Lattice::writeLattice(FILE* f)
 {
-	register unsigned int i;
+	register int i;
 	for(i=0;i<latticeSize-1;++i)
 	{
 		lattice[i].state.printCompact(f);

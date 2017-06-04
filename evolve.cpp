@@ -9,7 +9,7 @@
 #define DEFAULT_STEPS 100
 #define DEFAULT_LATTICE_SIZE 1000
 #define DEFAULT_LATTICE_WIDTH 10.0
-#define DEFAULT_WAVE_WIDTH 0.5
+#define DEFAULT_WAVE_WIDTH 1.0
 #define DEFAULT_OUTFILE (char*)"out.txt"
 #define DEFAULT_TIMESTEP 0.05
 
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 	}
 	if(steps == 0) steps = DEFAULT_STEPS;
 
-	unsigned int latticeSize = 0;
+	int latticeSize = 0;
 	if(argSet(latticeSizeOption)) {
 		latticeSize = atoi(latticeSizeOption);
 	}
