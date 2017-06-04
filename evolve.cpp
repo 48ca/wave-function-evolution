@@ -9,6 +9,7 @@
 #define DEFAULT_STEPS 100
 #define DEFAULT_LATTICE_SIZE 1000
 #define DEFAULT_LATTICE_WIDTH 10.0
+#define DEFAULT_WAVE_WIDTH 0.5
 #define DEFAULT_OUTFILE (char*)"out.txt"
 #define DEFAULT_TIMESTEP 0.05
 
@@ -20,6 +21,7 @@ int main(int argc, char** argv)
 	char* historySizeOption  = addArgument((char*)"Number of steps", TAKES_ONE_ARGUMENT, (char*)"-n", (char*)"--steps");
 	char* latticeSizeOption  = addArgument((char*)"Size of lattice", TAKES_ONE_ARGUMENT, (char*)"-s", (char*)"--size");
 	char* latticeWidthOption = addArgument((char*)"Width of lattice", TAKES_ONE_ARGUMENT, (char*)"-w", (char*)"--width");
+	char* waveWidthOption    = addArgument((char*)"Width of the wave", TAKES_ONE_ARGUMENT, (char*)"-g", (char*)"--gauss");
 	char* timestepOption     = addArgument((char*)"Timestep", TAKES_ONE_ARGUMENT, (char*)"-t", (char*)"--timestep");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
 
@@ -68,6 +70,12 @@ int main(int argc, char** argv)
 	}
 	if(timestep <= 0) timestep = DEFAULT_TIMESTEP;
 
+	_float waveWidth = 0;
+	if(argSet(waveWidthOption)) {
+		waveWidth = (_float)(atof(waveWidthOption));
+	}
+	if(waveWidth <= 0) waveWidth = DEFAULT_WAVE_WIDTH;
+
 	// printf("Generating a history of %d lattice states (%f MB)\n",
 	//  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
 
@@ -81,7 +89,7 @@ int main(int argc, char** argv)
 
 	puts("Setting initial state...");
 	history->initialize(latticeWidth, latticeSize);
-	history->setInitialState(.1); // wave width
+	history->setInitialState(waveWidth); // wave width
 
 	// Evolve
 
