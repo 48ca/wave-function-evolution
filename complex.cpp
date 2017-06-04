@@ -117,20 +117,18 @@ void Complex::printReal() const
 
 }
 
-void printFloat(_float f)
+void printFloat(char* buf, _float f)
 {
 
 #ifndef USING_QUADMATH
 
-	printf("%Le\n", f);
+	fprintf(buf, "%Le\n", f);
 
 #else
 
 	int width = 20;
 
-	char real_buf[PRINT_BUFFER_SIZE];
-	quadmath_snprintf(real_buf, PRINT_BUFFER_SIZE, "%#*.20Qe", width, f);
-	printf("%s\n", real_buf);
+	quadmath_snprintf(buf, PRINT_BUFFER_SIZE, "%#*.20Qe", width, f);
 
 #endif
 

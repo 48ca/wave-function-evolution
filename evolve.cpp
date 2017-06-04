@@ -96,11 +96,13 @@ int main(int argc, char** argv)
 			fprintf(f, "\n");
 		}
 
-		delete [] curr->lattice;
+		char prob[128];
+		printFloat(prob, curr->prob);
 
+		delete [] curr->lattice;
 		curr = next;
 
-		//printf("\rSteps: %05d", i);
+		printf("\rSteps: %05d : prob %s", i, prob);
 		fflush(stdout);
 	}
 	printf("\n");

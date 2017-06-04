@@ -101,7 +101,5 @@ int Lattice::writeLattice(FILE* f)
 		fprintf(f,",");
 	}
 	lattice[latticeSize-1].state.printCompact(f);
-	//fprintf(f,":%ld",prob);
-	printFloat(prob);
 	return 0;
 }

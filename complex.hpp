@@ -93,5 +93,5 @@ extern _complex RawComplex_I;
 #endif
 const Complex Complex_I = Complex(0, 1);
 
-void printFloat(_float);
+void printFloat(char*, _float);
 #endif // COMPLEX_WRAPPER_H
