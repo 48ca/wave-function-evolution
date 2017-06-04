@@ -13,100 +13,100 @@
 int main(int argc, char** argv)
 {
 
-    // char* filename           = setDefaultArgument((char*)"Output filename");
-    char* outputFilename     = addArgument((char*)"Output filename", TAKES_ONE_ARGUMENT, (char*)"-o", (char*)"--out");
-    char* historySizeOption  = addArgument((char*)"Number of steps", TAKES_ONE_ARGUMENT, (char*)"-n", (char*)"--steps");
-    char* latticeSizeOption  = addArgument((char*)"Size of lattice", TAKES_ONE_ARGUMENT, (char*)"-s", (char*)"--size");
-    char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
+	// char* filename           = setDefaultArgument((char*)"Output filename");
+	char* outputFilename     = addArgument((char*)"Output filename", TAKES_ONE_ARGUMENT, (char*)"-o", (char*)"--out");
+	char* historySizeOption  = addArgument((char*)"Number of steps", TAKES_ONE_ARGUMENT, (char*)"-n", (char*)"--steps");
+	char* latticeSizeOption  = addArgument((char*)"Size of lattice", TAKES_ONE_ARGUMENT, (char*)"-s", (char*)"--size");
+	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
 
-    int argError;
-    argError = handle(argc, argv);
-    if(argError) {
-        fprintf(stderr, "Run `evolve --help` for more information\n");
-        return argError;
-    }
+	int argError;
+	argError = handle(argc, argv);
+	if(argError) {
+		fprintf(stderr, "Run `evolve --help` for more information\n");
+		return argError;
+	}
 
-    if(argSet(helpOption)) {
-        printUsage();
-        return 0;
-    }
+	if(argSet(helpOption)) {
+		printUsage();
+		return 0;
+	}
 
-    if(argSet(outputFilename)) {
-        // Output specified
-        printf("Writing output to %s\n", outputFilename);
-    } else {
-        free(outputFilename);
-        outputFilename = DEFAULT_OUTFILE;
-    }
+	if(argSet(outputFilename)) {
+		// Output specified
+		printf("Writing output to %s\n", outputFilename);
+	} else {
+		free(outputFilename);
+		outputFilename = DEFAULT_OUTFILE;
+	}
 
-    int steps = 0;
-    // steps defines the number of times the program will evolve our lattice
-    if(argSet(historySizeOption)) {
-        steps = atoi(historySizeOption);
-    }
-    if(steps == 0) steps = DEFAULT_STEPS;
-    unsigned int latticeSize = 0;
-    if(argSet(latticeSizeOption)) {
-        latticeSize = atoi(latticeSizeOption);
-    }
-    if(latticeSize == 0) latticeSize = DEFAULT_LATTICE_SIZE;
+	int steps = 0;
+	// steps defines the number of times the program will evolve our lattice
+	if(argSet(historySizeOption)) {
+		steps = atoi(historySizeOption);
+	}
+	if(steps == 0) steps = DEFAULT_STEPS;
+	unsigned int latticeSize = 0;
+	if(argSet(latticeSizeOption)) {
+		latticeSize = atoi(latticeSizeOption);
+	}
+	if(latticeSize == 0) latticeSize = DEFAULT_LATTICE_SIZE;
 
-    // printf("Generating a history of %d lattice states (%f MB)\n",
-    //  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
+	// printf("Generating a history of %d lattice states (%f MB)\n",
+	//  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
 
-    Lattice* history = new Lattice[steps + 1];
+	Lattice* history = new Lattice[steps + 1];
 
-    puts("Finished allocating memory");
+	puts("Finished allocating memory");
 
-    // Initialize
+	// Initialize
 
-    _float timestep = .1; // Something
-    // Set initial lattice (*history);
+	_float timestep = .1; // Something
+	// Set initial lattice (*history);
 
-    puts("Setting initial state...");
-    history->initialize(0, latticeSize);
-    history->setInitialState(0.1);
+	puts("Setting initial state...");
+	history->initialize(0, latticeSize);
+	history->setInitialState(0.1);
 
-    // Evolve
+	// Evolve
 
-    puts("Evolving...");
+	puts("Evolving...");
 
-    Lattice* curr = &(history[0]);
-    Lattice* next = NULL;
-    printf("\n");
+	Lattice* curr = &(history[0]);
+	Lattice* next = NULL;
+	printf("\n");
 
 
-    FILE* f = fopen(outputFilename, "w");
-    if(f == NULL)
-    {
-        fprintf(stderr, "Cannot write to %s\n", outputFilename);
-        return 1;
-    }
+	FILE* f = fopen(outputFilename, "w");
+	if(f == NULL)
+	{
+		fprintf(stderr, "Cannot write to %s\n", outputFilename);
+		return 1;
+	}
 
-    register int i;
-    for(i=0;i<steps;++i)
-    {
-        next = &(history[1+i]);
-        next->initialize(0, latticeSize);
+	register int i;
+	for(i=0;i<steps;++i)
+	{
+		next = &(history[1+i]);
+		next->initialize(0, latticeSize);
 
-        curr->evolve(timestep, next);
+		curr->evolve(timestep, next);
 
-        if(i % 5 == 0) {
-            history[i].writeLattice(f);
-            fprintf(f, "\n");
-        }
+		if(i % 5 == 0) {
+			history[i].writeLattice(f);
+			fprintf(f, "\n");
+		}
 
-        delete [] curr->lattice;
+		delete [] curr->lattice;
 
-        curr = next;
+		curr = next;
 
-        printf("\rSteps: %05d", i);
-        fflush(stdout);
-    }
-    printf("\n");
+		printf("\rSteps: %05d", i);
+		fflush(stdout);
+	}
+	printf("\n");
 
-    // Analyze
+	// Analyze
 
-    return 0;
+	return 0;
 
 }

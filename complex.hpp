@@ -42,50 +42,50 @@ const _complex RawComplex_I = csqrtq(1);
 class Complex
 {
 
-    /*
-     * Class to abstract complex arithmetic
-     */
+	/*
+	 * Class to abstract complex arithmetic
+	 */
 
-    public:
-        _complex raw;
+	public:
+		_complex raw;
 
-        Complex();
-        Complex(_float const&);
-        Complex(_float const&, _float const&);
-        Complex(_complex const&);
+		Complex();
+		Complex(_float const&);
+		Complex(_float const&, _float const&);
+		Complex(_complex const&);
 
-        void print() const;
-        void printCompact(FILE*) const;
+		void print() const;
+		void printCompact(FILE*) const;
 
-        _float magsq() const;
-        _float mag() const;
+		_float magsq() const;
+		_float mag() const;
 
-        /* Component assignments */
-        _float re() const;
-        void re(_float const&);
-        _float im() const;
-        void im(_float const&);
+		/* Component assignments */
+		_float re() const;
+		void re(_float const&);
+		_float im() const;
+		void im(_float const&);
 
-        void operator=  (const Complex&);
-        void operator+= (const Complex&);
-        void operator-= (const Complex&);
-        void operator*= (const Complex&);
-        void operator/= (const Complex&);
-        void operator^= (const Complex&);
+		void operator=  (const Complex&);
+		void operator+= (const Complex&);
+		void operator-= (const Complex&);
+		void operator*= (const Complex&);
+		void operator/= (const Complex&);
+		void operator^= (const Complex&);
 
-        Complex operator~ (void);
+		Complex operator~ (void);
 
-        friend Complex operator+ (const Complex&, const Complex&);
-        friend Complex operator- (const Complex&, const Complex&);
-        friend Complex operator* (const Complex&, const Complex&);
-        friend Complex operator/ (const Complex&, const Complex&);
-        friend Complex operator^ (const Complex&, const Complex&);
+		friend Complex operator+ (const Complex&, const Complex&);
+		friend Complex operator- (const Complex&, const Complex&);
+		friend Complex operator* (const Complex&, const Complex&);
+		friend Complex operator/ (const Complex&, const Complex&);
+		friend Complex operator^ (const Complex&, const Complex&);
 
-        friend Complex operator+ (const _complex&, const Complex&);
-        friend Complex operator- (const _complex&, const Complex&);
-        friend Complex operator* (const _complex&, const Complex&);
-        friend Complex operator/ (const _complex&, const Complex&);
-        friend Complex operator^ (const _complex&, const Complex&);
+		friend Complex operator+ (const _complex&, const Complex&);
+		friend Complex operator- (const _complex&, const Complex&);
+		friend Complex operator* (const _complex&, const Complex&);
+		friend Complex operator/ (const _complex&, const Complex&);
+		friend Complex operator^ (const _complex&, const Complex&);
 
 };
 

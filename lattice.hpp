@@ -7,40 +7,40 @@
 
 class State
 {
-    public:
-        Complex state;
-        State();
-        inline _float prob();
+	public:
+		Complex state;
+		State();
+		inline _float prob();
 };
 
 class Lattice
 {
-    public:
-        Lattice();
-        Lattice(_float const& L,
-                unsigned int const& N);
+	public:
+		Lattice();
+		Lattice(_float const& L,
+				unsigned int const& N);
 
-        ~Lattice();
+		~Lattice();
 
-        void initialize(_float const& L,
-                unsigned int const& N);
+		void initialize(_float const& L,
+				unsigned int const& N);
 
-        State* lattice;
-        unsigned int latticeSize;
+		State* lattice;
+		unsigned int latticeSize;
 
-        _float L;
-        unsigned int N;
-        _float dt;
-        _float prob;
+		_float L;
+		unsigned int N;
+		_float dt;
+		_float prob;
 
-        void normalize();
-        void probability();
+		void normalize();
+		void probability();
 
-        void evolve(_float const& dto, Lattice* const& outputLattice);
+		void evolve(_float const& dto, Lattice* const& outputLattice);
 
-        void setInitialState(_float);
+		void setInitialState(_float);
 
-        int writeLattice(FILE* f);
+		int writeLattice(FILE* f);
 };
 
 #endif // LATTICE_H
