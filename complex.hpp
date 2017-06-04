@@ -51,6 +51,7 @@ class Complex
 		Complex(_complex const&);
 
 		void print() const;
+		void printReal() const;
 		void printCompact(FILE*) const;
 
 		_float magsq() const;
