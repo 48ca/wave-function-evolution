@@ -10,10 +10,10 @@
 typedef std::complex<long double> _complex;
 typedef long double _float;
 
-#define Re(Z) Z.real()
-#define Im(Z) Z.imag()
+#define Re(Z) std::real(Z)
+#define Im(Z) std::imag(Z)
 
-const _complex RawComplex_I(0.0,1.0);
+const _complex RawComplex_I = _complex(0.0,1.0);
 
 #define Sqrt(Z) std::sqrt(Z)
 #define Exp(Z) std::exp(Z)

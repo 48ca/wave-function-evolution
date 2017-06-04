@@ -24,13 +24,12 @@ void Lattice::initialize(_float const& L, unsigned int const& N)
 void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 {
 	register unsigned int i;
-	const _float m = 1;
 
 #pragma omp parallel for
 	for(i=1; i<latticeSize-1; ++i)
 	{
 		// No potential
-		Complex d2dx2( ( lattice[i+1].state + lattice[i-1].state - 2 * lattice[i].state ) );
+		Complex d2dx2( ( lattice[i+1].state + lattice[i-1].state - lattice[i].state * 2 ) );
 		_float dbdt = d2dx2.re();
 		_float dadt = 0 - d2dx2.im();
 		outputLattice->lattice[i].state = Complex(
@@ -84,7 +83,7 @@ void Lattice::setInitialState(_float dx)
 	for(i=0;i<latticeSize;++i)
 	{
 		_float x = (i - latticeSize/2) * latticeWidth;
-		_float amp = Re(Exp(-1 * x*x / (2 * dx *  dx))) * 1 / Re(Sqrt(Sqrt(M_PIq) * dx));
+		_float amp = Re(Exp(-1 * x*x / (2 * dx *  dx))) * 1 / Re(Sqrt(Sqrt(PI) * dx));
 		lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
 		// lattice[i].state = Complex(amp);
 		// lattice[i].state.print();
