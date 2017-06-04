@@ -122,7 +122,7 @@ void printFloat(char* buf, _float f)
 
 #ifndef USING_QUADMATH
 
-	fprintf(buf, "%Le\n", f);
+	sprintf(buf, "%Le\n", f);
 
 #else
 
