@@ -28,9 +28,7 @@ class Lattice
 		State* lattice;
 		unsigned int latticeSize;
 
-		_float L;
-		unsigned int N;
-		_float dt;
+		_float latticeWidth;
 		_float prob;
 
 		void normalize();

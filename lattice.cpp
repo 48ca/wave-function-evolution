@@ -12,12 +12,14 @@ Lattice::Lattice()
 }
 Lattice::Lattice(_float const& L, unsigned int const& N)
 {
+	latticeWidth = L;
 	latticeSize = N;
 	lattice = new State[N];
 	prob = 0;
 }
 void Lattice::initialize(_float const& L, unsigned int const& N)
 {
+	latticeWidth = L;
 	latticeSize = N;
 	lattice = new State[N];
 	prob = 0;
@@ -38,6 +40,9 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 				lattice[i].state.im() + dto*dbdt
 				);
 	}
+	outputLattice->lattice[0].state = Complex(0);
+	outputLattice->lattice[latticeSize-1].state = Complex(0);
+
 	outputLattice->normalize();
 }
 void Lattice::normalize()
@@ -79,17 +84,18 @@ void Lattice::setInitialState(_float dx)
 {
 	register unsigned int i;
 
-	_float latticeWidth = 1.0;
-
 #pragma omp parallel for
-	for(i=0;i<latticeSize;++i)
+	for(i=1;i<latticeSize-1;++i)
 	{
-		_float x = (i - latticeSize/2) * latticeWidth;
-		_float amp = Re(Exp(-1 * x*x / (2 * dx *  dx))) * 1 / Re(Sqrt(Sqrt(PI) * dx));
+		_float x = (i - latticeSize/2) * latticeWidth/latticeSize;
+		_float amp = Re(Exp(-1 * x*x / (2 * dx * dx))) / Re(Sqrt(Sqrt(PI) * dx));
 		lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
 		// lattice[i].state = Complex(amp);
 		// lattice[i].state.print();
 	}
+	lattice[0].state = Complex(0);
+	lattice[latticeSize-1].state = Complex(0);
+
 	this->normalize();
 }
 int Lattice::writeLattice(FILE* f)

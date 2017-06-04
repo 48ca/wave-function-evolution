@@ -8,7 +8,9 @@
 
 #define DEFAULT_STEPS 100
 #define DEFAULT_LATTICE_SIZE 1000
+#define DEFAULT_LATTICE_WIDTH 10.0
 #define DEFAULT_OUTFILE (char*)"out.txt"
+#define DEFAULT_TIMESTEP 0.05
 
 int main(int argc, char** argv)
 {
@@ -17,6 +19,8 @@ int main(int argc, char** argv)
 	char* outputFilename     = addArgument((char*)"Output filename", TAKES_ONE_ARGUMENT, (char*)"-o", (char*)"--out");
 	char* historySizeOption  = addArgument((char*)"Number of steps", TAKES_ONE_ARGUMENT, (char*)"-n", (char*)"--steps");
 	char* latticeSizeOption  = addArgument((char*)"Size of lattice", TAKES_ONE_ARGUMENT, (char*)"-s", (char*)"--size");
+	char* latticeWidthOption = addArgument((char*)"Width of lattice", TAKES_ONE_ARGUMENT, (char*)"-w", (char*)"--width");
+	char* timestepOption     = addArgument((char*)"Timestep", TAKES_ONE_ARGUMENT, (char*)"-t", (char*)"--timestep");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
 
 	int argError;
@@ -45,11 +49,24 @@ int main(int argc, char** argv)
 		steps = atoi(historySizeOption);
 	}
 	if(steps == 0) steps = DEFAULT_STEPS;
+
 	unsigned int latticeSize = 0;
 	if(argSet(latticeSizeOption)) {
 		latticeSize = atoi(latticeSizeOption);
 	}
 	if(latticeSize == 0) latticeSize = DEFAULT_LATTICE_SIZE;
+
+	_float latticeWidth = 0;
+	if(argSet(latticeWidthOption)) {
+		latticeWidth = (_float)(atof(latticeWidthOption));
+	}
+	if(latticeWidth <= 0) latticeWidth = DEFAULT_LATTICE_WIDTH;
+
+	_float timestep = 0;
+	if(argSet(timestepOption)) {
+		timestep = (_float)(atof(timestepOption));
+	}
+	if(timestep <= 0) timestep = DEFAULT_TIMESTEP;
 
 	// printf("Generating a history of %d lattice states (%f MB)\n",
 	//  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
@@ -60,12 +77,11 @@ int main(int argc, char** argv)
 
 	// Initialize
 
-	_float timestep = .1; // Something
 	// Set initial lattice (*history);
 
 	puts("Setting initial state...");
-	history->initialize(0, latticeSize);
-	history->setInitialState(0.1);
+	history->initialize(latticeWidth, latticeSize);
+	history->setInitialState(.1); // wave width
 
 	// Evolve
 
@@ -87,7 +103,7 @@ int main(int argc, char** argv)
 	for(i=0;i<steps;++i)
 	{
 		next = &(history[1+i]);
-		next->initialize(0, latticeSize);
+		next->initialize(latticeWidth, latticeSize);
 
 		curr->evolve(timestep, next);
 
