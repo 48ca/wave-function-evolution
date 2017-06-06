@@ -67,13 +67,14 @@ add_library(complex STATIC complex.cpp)
 if(HAS_QUADMATH_H)
 	target_link_libraries(complex quadmath)
 endif(HAS_QUADMATH_H)
+add_library(state SHARED state.cpp)
 add_library(lattice STATIC lattice.cpp)
 
 add_executable(test-complex test-complex.cpp)
-target_link_libraries(test-complex -lm complex lattice)
+target_link_libraries(test-complex -lm complex state lattice)
 
 add_executable(evolve evolve.cpp)
-target_link_libraries(evolve -lm complex lattice handle)
+target_link_libraries(evolve -lm complex state lattice handle)
 # TODO add back ${FFTW_LIBRARIES} to linked libraries when necessary
 
 install(TARGETS evolve DESTINATION bin)

@@ -4,14 +4,7 @@
 #include <string>
 #include "complex.hpp"
 #include <cstdio>
-
-class State
-{
-	public:
-		Complex state;
-		State();
-		inline _float prob();
-};
+#include "state.hpp"
 
 class Lattice
 {

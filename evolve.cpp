@@ -2,6 +2,7 @@
 // Uncomment when necessary
 #include "complex.hpp"
 #include "lattice.hpp"
+#include "state.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include "libs/handle.h"

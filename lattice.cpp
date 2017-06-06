@@ -1,6 +1,7 @@
 #include <string>
 #include "lattice.hpp"
 #include "constants.hpp"
+#include "state.hpp"
 #include <cstdio>
 #include <iostream>
 
@@ -74,15 +75,6 @@ void Lattice::probability()
 Lattice::~Lattice()
 {
 	delete [] lattice;
-}
-
-State::State()
-{
-
-}
-_float State::prob()
-{
-	return state.magsq();
 }
 void Lattice::setInitialState(_float dx)
 {
