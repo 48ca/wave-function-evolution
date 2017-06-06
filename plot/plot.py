@@ -44,13 +44,13 @@ with open(sys.argv[1], 'r') as f:
             hist['pr'][i].append(re*re + im*im)
 
 fig, ax = plt.subplots()
-ax.set_ylim(-7, 7)
+ax.set_ylim(-1.5, 1.5)
 re, = ax.plot(hist['re'][0])
 im, = ax.plot(hist['im'][0])
 def update(data):
     re.set_ydata(hist['re'][data])
     im.set_ydata(hist['im'][data])
-ani = animation.FuncAnimation(fig, update, np.arange(0, len(hist['re'])), interval=100)
+ani = animation.FuncAnimation(fig, update, np.arange(0, len(hist['re'])), interval=1)
 plt.show()
 #for p in range(0,len(hist['re'])):
 #    re.set_ydata(hist['re'][p])

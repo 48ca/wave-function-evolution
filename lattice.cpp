@@ -65,7 +65,7 @@ void Lattice::probability()
 	{
 		prob += lattice[i].prob();
 	}
-	prob = prob/latticeSize;
+	prob = latticeWidth*prob/latticeSize;
 }
 Lattice::~Lattice()
 {
@@ -87,9 +87,12 @@ void Lattice::setInitialState(_float dx)
 #pragma omp parallel for
 	for(i=1;i<latticeSize-1;++i)
 	{
-		_float x = (i - latticeSize/2) * latticeWidth/(_float)(latticeSize);
-		_float amp = Re(Exp(-1 * x*x / (2 * dx * dx))) / Re(Sqrt(Sqrt(PI) * dx));
-		lattice[i].state = Complex(amp * Re(Cos((x - 1000)*1000)), amp * Re(Sin((x - 1000)*1000)));
+		//_float xinit = 125;
+		//_float delta = latticeWidth/latticeSize;
+		_float x = ((_float)(i) - latticeSize/2) * latticeWidth/(_float)(latticeSize);
+		_float amp = Re(Exp(-1 * (x)*(x) / (2 * dx * dx)));
+		_float wav = 1;
+		lattice[i].state = Complex(amp * Re(Cos((2*x*PI/wav))), amp * Re(Sin((2*x*PI/wav))));
 		// lattice[i].state = Complex(amp);
 		// lattice[i].state.print();
 	}
