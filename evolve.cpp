@@ -7,13 +7,13 @@
 #include <cstdlib>
 #include "libs/handle.h"
 
-#define DEFAULT_STEPS 100
-#define DEFAULT_LATTICE_SIZE 1000
-#define DEFAULT_LATTICE_WIDTH 10.0
+#define DEFAULT_STEPS 100000
+#define DEFAULT_LATTICE_SIZE 500
+#define DEFAULT_LATTICE_WIDTH 30.0
 #define DEFAULT_WAVE_WIDTH 1.0
 #define DEFAULT_OUTFILE (char*)"out.txt"
-#define DEFAULT_TIMESTEP 0.05
-#define DEFAULT_WAVE_WRITE 10
+#define DEFAULT_TIMESTEP 0.005
+#define DEFAULT_WAVE_WRITE 400
 
 int main(int argc, char** argv)
 {
