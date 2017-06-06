@@ -38,6 +38,7 @@ fi
 
 build default "default settings" || check $?
 build noquadmath "no quadmath" "-DNO_QUADMATH=True" || check $?
+build noopenmp "no openmp" "-DNO_OPENMP=True" || check $?
 
 echo -e "\e[92mAll builds completed\e[0m"
 

@@ -28,7 +28,9 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
 
+#ifdef USING_OPENMP
 #pragma omp parallel for
+#endif
 	for(i=1; i<latticeSize-1; ++i)
 	{
 		// No potential
@@ -51,7 +53,9 @@ void Lattice::normalize()
 	register int i;
 	_float div = Re(Sqrt(prob));
 
+#ifdef USING_OPENMP
 #pragma omp parallel for
+#endif
 	for(i=1; i<latticeSize-1; ++i)
 	{
 		lattice[i].state /= div;
@@ -84,7 +88,9 @@ void Lattice::setInitialState(_float dx)
 {
 	register int i;
 
+#ifdef USING_OPENMP
 #pragma omp parallel for
+#endif
 	for(i=1;i<latticeSize-1;++i)
 	{
 		//_float xinit = 125;
