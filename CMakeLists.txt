@@ -12,6 +12,7 @@ if(NOT NO_OPENMP)
 	if (OPENMP_FOUND)
 		set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 		set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+		add_definitions(-DUSING_OPENMP)
 	endif(OPENMP_FOUND)
 endif(NOT NO_OPENMP)
 
