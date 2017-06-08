@@ -102,6 +102,7 @@ int main(int argc, char** argv)
 
 	// Evolve
 
+	printf("Will evolve for %d steps\n", steps);
 	puts("Evolving...");
 	printf("Writing every %d evolutions\n", waveWrite);
 
@@ -136,7 +137,7 @@ int main(int argc, char** argv)
 		delete [] curr->lattice;
 		curr = next;
 
-		printf("\rSteps: %09d : prob %s", i, prob);
+		printf("\rSteps: %09d (%7.4f%%): prob %s", i, (float)i*100.0/steps, prob);
 		fflush(stdout);
 	}
 	printf("\n");
