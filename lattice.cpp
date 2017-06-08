@@ -35,12 +35,10 @@ void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
 	for(i=1; i<latticeSize-1; ++i)
 	{
 		// No potential
-		Complex d2dx2( ( lattice[i+1].state + lattice[i-1].state - lattice[i].state * 2 ) );
-		_float dbdt = d2dx2.re();
-		_float dadt = 0 - d2dx2.im();
+		_complex d2dx2 = lattice[i+1].state.raw + lattice[i-1].state.raw - lattice[i].state.raw * 2;
 		outputLattice->lattice[i].state = Complex(
-				lattice[i].state.re() + dto*dadt,
-				lattice[i].state.im() + dto*dbdt
+				lattice[i].state.re() - dto*Im(d2dx2),
+				lattice[i].state.im() + dto*Re(d2dx2)
 				);
 	}
 	outputLattice->lattice[0].state = Complex(0);
@@ -59,7 +57,7 @@ void Lattice::normalize()
 #endif
 	for(i=1; i<latticeSize-1; ++i)
 	{
-		lattice[i].state /= div;
+		lattice[i].state.raw /= div;
 	}
 }
 void Lattice::probability()
@@ -89,7 +87,7 @@ void Lattice::setInitialState(_float dx)
 		//_float delta = latticeWidth/latticeSize;
 		_float x = ((_float)(i) - latticeSize/2) * latticeWidth/(_float)(latticeSize);
 		_float amp = Re(Exp(-1 * (x)*(x) / (2 * dx * dx)));
-		_float wav = 1;
+		_float wav = .5;
 		lattice[i].state = Complex(amp * Re(Cos((2*x*PI/wav))), amp * Re(Sin((2*x*PI/wav))));
 		// lattice[i].state = Complex(amp);
 		// lattice[i].state.print();

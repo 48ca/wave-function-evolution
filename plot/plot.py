@@ -15,7 +15,7 @@ from time import sleep
 
 # Get current size
 fig_size = plt.rcParams["figure.figsize"]
- 
+
 # Set figure width to 32 and height to 24
 fig_size[0] = 32
 fig_size[1] = 24
@@ -41,15 +41,17 @@ with open(sys.argv[1], 'r') as f:
             hist['re'][i].append(re)
             hist['im'][i].append(im)
             hist['co'][i].append(complex(re, im))
-            hist['pr'][i].append(re*re + im*im)
+            hist['pr'][i].append((re*re + im*im)**.5)
 
 fig, ax = plt.subplots()
 ax.set_ylim(-1.5, 1.5)
 re, = ax.plot(hist['re'][0])
 im, = ax.plot(hist['im'][0])
+pr, = ax.plot(hist['pr'][0])
 def update(data):
     re.set_ydata(hist['re'][data])
     im.set_ydata(hist['im'][data])
+    pr.set_ydata(hist['pr'][data])
 ani = animation.FuncAnimation(fig, update, np.arange(0, len(hist['re'])), interval=1)
 plt.show()
 #for p in range(0,len(hist['re'])):
