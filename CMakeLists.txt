@@ -74,8 +74,11 @@ target_link_libraries(lattice state)
 add_executable(test-complex test-complex.cpp)
 target_link_libraries(test-complex -lm complex state lattice)
 
-add_executable(evolve evolve.cpp)
-target_link_libraries(evolve -lm complex state lattice handle)
+add_executable(evolvequ evolvequ.cpp)
+target_link_libraries(evolvequ -lm complex state lattice handle)
+add_executable(evolvewv evolvewv.cpp)
+target_link_libraries(evolvewv -lm complex state lattice handle)
 # TODO add back ${FFTW_LIBRARIES} to linked libraries when necessary
 
-install(TARGETS evolve DESTINATION bin)
+install(TARGETS evolvequ DESTINATION bin)
+install(TARGETS evolvewv DESTINATION bin)

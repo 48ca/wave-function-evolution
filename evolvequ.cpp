@@ -7,13 +7,13 @@
 #include <cstdlib>
 #include "libs/handle.h"
 
-#define DEFAULT_STEPS 125000
-#define DEFAULT_LATTICE_SIZE 1000
-#define DEFAULT_LATTICE_WIDTH 50.0
+#define DEFAULT_STEPS 100000
+#define DEFAULT_LATTICE_SIZE 500
+#define DEFAULT_LATTICE_WIDTH 30.0
 #define DEFAULT_WAVE_WIDTH 1.0
-#define DEFAULT_OUTFILE (char*)"out.txt"
+#define DEFAULT_OUTFILE (char*)"outqu.txt"
 #define DEFAULT_TIMESTEP 0.005
-#define DEFAULT_WAVE_WRITE 300
+#define DEFAULT_WAVE_WRITE 400
 
 int main(int argc, char** argv)
 {
@@ -98,11 +98,10 @@ int main(int argc, char** argv)
 
 	puts("Setting initial state...");
 	history->initialize(latticeWidth, latticeSize);
-	history->setInitialState(waveWidth); // wave width
+	history->setInitialStatequ(waveWidth); // wave width
 
 	// Evolve
 
-	printf("Will evolve for %d steps\n", steps);
 	puts("Evolving...");
 	printf("Writing every %d evolutions\n", waveWrite);
 
@@ -124,7 +123,7 @@ int main(int argc, char** argv)
 		next = &(history[1+i]);
 		next->initialize(latticeWidth, latticeSize);
 
-		curr->evolve(timestep, next);
+		curr->evolvequ(timestep, next);
 
 		if(i % waveWrite == 0) {
 			history[i].writeLattice(f);
@@ -137,7 +136,7 @@ int main(int argc, char** argv)
 		delete [] curr->lattice;
 		curr = next;
 
-		printf("\rSteps: %09d (%7.4f%%): prob %s", i, (float)i*100.0/steps, prob);
+		printf("\rSteps: %09d : prob %s", i, prob);
 		fflush(stdout);
 	}
 	printf("\n");

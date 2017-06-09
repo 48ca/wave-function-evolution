@@ -27,10 +27,11 @@ class Lattice
 		void normalize();
 		void probability();
 
-		void evolve(_float const& dto, Lattice* const& outputLattice);
+		void evolvequ(_float const& dto, Lattice* const& outputLattice);
+		void evolvewv(_float const& dto, Lattice* const& outputLattice);
 
-		void setInitialState(_float);
-
+		void setInitialStatequ(_float);
+		void setInitialStatewv(_float);
 		int writeLattice(FILE* f);
 };
 

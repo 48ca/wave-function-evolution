@@ -25,7 +25,30 @@ void Lattice::initialize(_float const& L, int const& N)
 	lattice = new State[N];
 	prob = 0;
 }
-void Lattice::evolve(_float const& dto, Lattice* const& outputLattice)
+void Lattice::evolvequ(_float const& dto, Lattice* const& outputLattice)
+{
+	register int i;
+
+#ifdef USING_OPENMP
+#pragma omp parallel for
+#endif
+	for(i=1; i<latticeSize-1; ++i)
+	{
+		// No potential
+		Complex d2dx2( ( lattice[i+1].state + lattice[i-1].state - lattice[i].state * 2 ) );
+		_float dbdt = d2dx2.re();
+		_float dadt = 0 - d2dx2.im();
+		outputLattice->lattice[i].state = Complex(
+				lattice[i].state.re() + dto*dadt,
+				lattice[i].state.im() + dto*dbdt
+				);
+	}
+	outputLattice->lattice[0].state = Complex(0);
+	outputLattice->lattice[latticeSize-1].state = Complex(0);
+
+	outputLattice->normalize();
+}
+void Lattice::evolvewv(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
 
@@ -74,7 +97,30 @@ Lattice::~Lattice()
 {
 	delete [] lattice;
 }
-void Lattice::setInitialState(_float dx)
+void Lattice::setInitialStatequ(_float dx)
+{
+	register int i;
+
+#ifdef USING_OPENMP
+#pragma omp parallel for
+#endif
+	for(i=1;i<latticeSize-1;++i)
+	{
+		//_float xinit = 125;
+		//_float delta = latticeWidth/latticeSize;
+		_float x = ((_float)(i) - latticeSize/2) * latticeWidth/(_float)(latticeSize);
+		_float amp = Re(Exp(-1 * (x)*(x) / (2 * dx * dx)));
+		_float wav = 1;
+		lattice[i].state = Complex(amp * Re(Cos((2*x*PI/wav))), amp * Re(Sin((2*x*PI/wav))));
+		// lattice[i].state = Complex(amp);
+		// lattice[i].state.print();
+	}
+	lattice[0].state = Complex(0);
+	lattice[latticeSize-1].state = Complex(0);
+
+	this->normalize();
+}
+void Lattice::setInitialStatewv(_float dx)
 {
 	register int i;
 
