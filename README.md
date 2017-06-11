@@ -1,7 +1,8 @@
 # Quantum State Evolution
 ## Installation
 Execute `cmake .` in the root of the project to generate the Makefile.
-To compile the code, run `make`.
+To compile the code, run `make`.  
+The binaries produced are `evolvequ` and `evolvewv`.  
 To install the code for the entire system, run `make install` after running `make`.
 ## Post-installation
 To clean CMake installation files, you can use `clean_cmake.sh`.
