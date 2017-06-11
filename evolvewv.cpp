@@ -127,17 +127,14 @@ int main(int argc, char** argv)
 		curr->evolvewv(timestep, next);
 
 		if(i % waveWrite == 0) {
-			history[i].writeLattice(f);
+			history[i].writeLatticewv(f);
 			fprintf(f, "\n");
 		}
-
-		char prob[128];
-		printFloat(prob, curr->prob);
 
 		delete [] curr->lattice;
 		curr = next;
 
-		printf("\rSteps: %09d (%7.4f%%): prob %s", i, (float)i*100.0/steps, prob);
+		printf("\rSteps: %09d (%7.4f%%)", i, (float)i*100.0/steps);
 		fflush(stdout);
 	}
 	printf("\n");

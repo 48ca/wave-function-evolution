@@ -5,6 +5,7 @@
 #include "complex.hpp"
 #include <cstdio>
 #include "state.hpp"
+#include "phi.hpp"
 
 class Lattice
 {
@@ -19,6 +20,7 @@ class Lattice
 				int const& N);
 
 		State* lattice;
+
 		int latticeSize;
 
 		_float latticeWidth;
@@ -33,6 +35,7 @@ class Lattice
 		void setInitialStatequ(_float);
 		void setInitialStatewv(_float);
 		int writeLattice(FILE* f);
+		int writeLatticewv(FILE* f);
 };
 
 #endif // LATTICE_H
