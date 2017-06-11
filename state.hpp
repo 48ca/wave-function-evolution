@@ -12,7 +12,7 @@ class State
 		State();
 		_float prob();
 
-		_float value;
-		_float dot;
+		_float phi;
+		_float derivative;
 };
 #endif //state. i guess.
