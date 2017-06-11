@@ -121,20 +121,21 @@ int main(int argc, char** argv)
 	register int i;
 	for(i=0;i<steps;++i)
 	{
-		next = &(history[1+i]);
-		next->initialize(latticeWidth, latticeSize);
+		next = &(history[(1+i)%4]);
+		if(1 + i < 4)
+			next->initialize(latticeWidth, latticeSize);
 
 		curr->evolvequ(timestep, next);
 
 		if(i % waveWrite == 0) {
-			history[i].writeLattice(f);
+			curr->writeLattice(f);
 			fprintf(f, "\n");
 		}
 
 		char prob[128];
 		printFloat(prob, curr->prob);
 
-		delete [] curr->lattice;
+		// delete [] curr->lattice;
 		curr = next;
 
 		printf("\rSteps: %09d (%7.4f%%): prob %s", i, (float)i*100.0/steps, prob);
