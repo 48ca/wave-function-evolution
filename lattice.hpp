@@ -5,7 +5,6 @@
 #include "complex.hpp"
 #include <cstdio>
 #include "state.hpp"
-#include "phi.hpp"
 
 class Lattice
 {
