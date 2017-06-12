@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	char* waveWriteOption    = addArgument((char*)"Waves until write", TAKES_ONE_ARGUMENT, (char*)"-u", (char*)"--wuw");
 	char* timestepOption     = addArgument((char*)"Timestep", TAKES_ONE_ARGUMENT, (char*)"-t", (char*)"--timestep");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
-	char* modeOption		 = addArgument((char*)"Mode option", TAKES_ONE_ARGUMENT, (char*)"-m", (char*)"--mode");
+	char* modeOption         = addArgument((char*)"Mode option", TAKES_ONE_ARGUMENT, (char*)"-m", (char*)"--mode");
 
 	int mode = SCHRODINGER;
 
@@ -149,7 +149,20 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	fprintf(f, "--- mode;%s;---\n", mode == SCHRODINGER ? "schrodinger" : "classical");
+	fprintf(f, "--- mode;%s;options;", mode == SCHRODINGER ? "schrodinger" : "classical");
+	fprintf(f,"n:%ld;", steps);
+	fprintf(f,"u:%d;", waveWrite);
+	fprintf(f,"o:%s;", outputFilename);
+	fprintf(f,"s:%d;", latticeSize);
+	char b[128];
+	printFloat(b, waveWidth);
+	fprintf(f,"g:%s;", b);
+	printFloat(b, latticeWidth);
+	fprintf(f,"w:%s;", b);
+	printFloat(b, timestep);
+	fprintf(f,"t:%s;", b);
+	fprintf(f,"\n");
+
 	register long i;
 	for(i=0;i<steps;++i)
 	{
