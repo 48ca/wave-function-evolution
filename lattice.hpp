@@ -28,13 +28,14 @@ class Lattice
 		void normalize();
 		void probability();
 
-		void evolvequ(_float const& dto, Lattice* const& outputLattice);
-		void evolvewv(_float const& dto, Lattice* const& outputLattice);
+		void evolveSchrodinger(_float const& dto, Lattice* const& outputLattice);
+		void evolveClassical(_float const& dto, Lattice* const& outputLattice);
 
-		void setInitialStatequ(_float);
-		void setInitialStatewv(_float);
-		int writeLattice(FILE* f);
-		int writeLatticewv(FILE* f);
+		void setInitialStateSchrodinger(_float);
+		void setInitialStateClassical(_float);
+
+		int writeLatticeSchrodinger(FILE* f);
+		int writeLatticeClassical(FILE* f);
 };
 
 #endif // LATTICE_H
