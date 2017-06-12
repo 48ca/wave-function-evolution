@@ -119,21 +119,20 @@ void Lattice::setInitialStatequ(_float dx)
 void Lattice::setInitialStatewv(_float dx)
 {
 	register int i;
+	register _float derivative;
 
 #ifdef USING_OPENMP
 #pragma omp parallel for
 #endif
 	for(i=1;i<latticeSize-1;++i)
 	{
-		_float x0 = 0;
-		_float x = ((_float)(i) - latticeSize/2) * latticeWidth/(_float)(latticeSize);
-		_float phi = Re(Exp(0 - (x-x0)*(x-x0) / (2 * dx * dx)));
+		_float x0 = (_float)(latticeWidth)/2;
+		_float x = (_float)(i) * latticeWidth/(_float)(latticeSize);
+		_float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx)));
 		// _float phi = Re(Sin(PI*(x-x0)));
-		_float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx) ));
+		derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx) ));
 		lattice[i].phi = phi;
 		lattice[i].derivative = derivative;
-		// lattice[i].state = Complex(amp);
-		// lattice[i].state.print();
 	}
 	lattice[0].phi = 0;
 	lattice[latticeSize-1].phi = 0;

@@ -40,7 +40,7 @@ with open(sys.argv[1], 'r') as f:
             hist['dt'][i].append(dt)
 
 fig, ax = plt.subplots()
-ax.set_ylim(-15, 15)
+ax.set_ylim(-75, 75)
 vl, = ax.plot(hist['vl'][0])
 dt, = ax.plot(hist['dt'][0])
 def update(data):
