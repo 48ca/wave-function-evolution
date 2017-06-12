@@ -35,7 +35,7 @@ void Lattice::evolvequ(_float const& dto, Lattice* const& outputLattice)
 	for(i=1; i<latticeSize-1; ++i)
 	{
 		// No potential
-		_complex d2dx2 = lattice[i+1].state.raw + lattice[i-1].state.raw - lattice[i].state.raw * 2;
+		_complex d2dx2 = lattice[i+1].state.raw + lattice[i-1].state.raw - lattice[i].state.raw * (_complex)2.0;
 		outputLattice->lattice[i].state = Complex(
 				lattice[i].state.re() - dto*Im(d2dx2),
 				lattice[i].state.im() + dto*Re(d2dx2)
@@ -119,7 +119,6 @@ void Lattice::setInitialStatequ(_float dx)
 void Lattice::setInitialStatewv(_float dx)
 {
 	register int i;
-	register _float derivative;
 
 #ifdef USING_OPENMP
 #pragma omp parallel for
@@ -130,7 +129,7 @@ void Lattice::setInitialStatewv(_float dx)
 		_float x = (_float)(i) * latticeWidth/(_float)(latticeSize);
 		_float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx)));
 		// _float phi = Re(Sin(PI*(x-x0)));
-		derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx) ));
+		_float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx) ));
 		lattice[i].phi = phi;
 		lattice[i].derivative = derivative;
 	}
