@@ -134,6 +134,7 @@ int main(int argc, char** argv)
 
 	printf("Will evolve for %ld steps\n", steps);
 	puts("Evolving...");
+	printf("Writing to %s\n", outputFilename);
 	printf("Writing every %d evolutions\n", waveWrite);
 
 	Lattice* curr = &(history[0]);
