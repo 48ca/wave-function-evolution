@@ -25,7 +25,7 @@ void Lattice::initialize(_float const& L, int const& N)
 	lattice = new State[N];
 	prob = 0;
 }
-void Lattice::evolvequ(_float const& dto, Lattice* const& outputLattice)
+void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
 
@@ -46,7 +46,7 @@ void Lattice::evolvequ(_float const& dto, Lattice* const& outputLattice)
 
 	outputLattice->normalize();
 }
-void Lattice::evolvewv(_float const& dto, Lattice* const& outputLattice)
+void Lattice::evolveClassical(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
 	//register _float delxsq = (latticeWidth/((_float)(latticeSize)))*(latticeWidth/((_float)(latticeSize)));
@@ -93,7 +93,7 @@ Lattice::~Lattice()
 {
 	delete [] lattice;
 }
-void Lattice::setInitialStatequ(_float dx)
+void Lattice::setInitialStateSchrodinger(_float dx)
 {
 	register int i;
 
@@ -116,7 +116,7 @@ void Lattice::setInitialStatequ(_float dx)
 
 	this->normalize();
 }
-void Lattice::setInitialStatewv(_float dx)
+void Lattice::setInitialStateClassical(_float dx)
 {
 	register int i;
 
@@ -138,7 +138,7 @@ void Lattice::setInitialStatewv(_float dx)
 	lattice[0].wave.derivative = 0;
 	lattice[latticeSize-1].wave.derivative = 0;
 }
-int Lattice::writeLattice(FILE* f)
+int Lattice::writeLatticeSchrodinger(FILE* f)
 {
 	register int i;
 	for(i=0;i<latticeSize-1;++i)
@@ -149,7 +149,7 @@ int Lattice::writeLattice(FILE* f)
 	lattice[latticeSize-1].state.printCompact(f);
 	return 0;
 }
-int Lattice::writeLatticewv(FILE* f)
+int Lattice::writeLatticeClassical(FILE* f)
 {
 	register int i;
 	char buf[128];

@@ -74,11 +74,11 @@ target_link_libraries(lattice state)
 add_executable(test-complex test-complex.cpp)
 target_link_libraries(test-complex -lm complex state lattice)
 
-add_executable(evolvequ evolvequ.cpp)
-target_link_libraries(evolvequ -lm complex state lattice handle)
-add_executable(evolvewv evolvewv.cpp)
-target_link_libraries(evolvewv -lm complex state lattice handle)
+add_executable(evolve evolve.cpp)
+target_link_libraries(evolve -lm complex state lattice handle)
+add_custom_target(evolvewv ALL COMMAND ${CMAKE_COMMAND} -E create_symlink evolve evolvewv)
+add_custom_target(evolvequ ALL COMMAND ${CMAKE_COMMAND} -E create_symlink evolve evolvequ)
+
 # TODO add back ${FFTW_LIBRARIES} to linked libraries when necessary
 
-install(TARGETS evolvequ DESTINATION bin)
-install(TARGETS evolvewv DESTINATION bin)
+install(TARGETS evolve DESTINATION bin)

@@ -5,15 +5,9 @@
 #include "state.hpp"
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include "libs/handle.h"
-
-#define DEFAULT_STEPS 100000
-#define DEFAULT_LATTICE_SIZE 1000
-#define DEFAULT_LATTICE_WIDTH 10
-#define DEFAULT_WAVE_WIDTH .8
-#define DEFAULT_OUTFILE (char*)"outwv.txt"
-#define DEFAULT_TIMESTEP 0.01
-#define DEFAULT_WAVE_WRITE 500
+#include "defaults.hpp"
 
 int main(int argc, char** argv)
 {
@@ -27,6 +21,12 @@ int main(int argc, char** argv)
 	char* waveWriteOption    = addArgument((char*)"Waves until write", TAKES_ONE_ARGUMENT, (char*)"-u", (char*)"--wuw");
 	char* timestepOption     = addArgument((char*)"Timestep", TAKES_ONE_ARGUMENT, (char*)"-t", (char*)"--timestep");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
+	char* modeOption		 = addArgument((char*)"Mode option", TAKES_ONE_ARGUMENT, (char*)"-m", (char*)"--mode");
+
+	int mode = SCHRODINGER;
+
+	if(!strcmp(argv[0], "./evolvewv") || !strcmp(argv[0], "evolvewv"))
+		mode = CLASSICAL;
 
 	int argError;
 	argError = handle(argc, argv);
@@ -40,50 +40,73 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
+	if(argSet(modeOption)) {
+		if(mode == CLASSICAL) {
+			fprintf(stderr, "Ignoring mode option\n");
+		}
+		if(!strcmp(modeOption, "s") || !strcmp(modeOption, "schrodinger"))
+			mode = SCHRODINGER;
+		else if(!strcmp(modeOption, "c") || !strcmp(modeOption, "classical"))
+			mode = CLASSICAL;
+	}
+
+	switch(mode) {
+		case SCHRODINGER:
+			puts("Running Schrodinger...");
+			break;
+		case CLASSICAL:
+			puts("Running classical...");
+			break;
+	}
+
+	generateDefaults(mode);
+
+	// Now we start real command line argument parsing
+
 	if(argSet(outputFilename)) {
 		// Output specified
 		printf("Writing output to %s\n", outputFilename);
 	} else {
 		free(outputFilename);
-		outputFilename = DEFAULT_OUTFILE;
+		outputFilename = defaults.outFile;
 	}
 
-	int steps = 0;
+	long steps = 0;
 	// steps defines the number of times the program will evolve our lattice
 	if(argSet(historySizeOption)) {
 		steps = atoi(historySizeOption);
 	}
-	if(steps == 0) steps = DEFAULT_STEPS;
+	if(steps == 0) steps = defaults.steps;
 
 	int latticeSize = 0;
 	if(argSet(latticeSizeOption)) {
 		latticeSize = atoi(latticeSizeOption);
 	}
-	if(latticeSize == 0) latticeSize = DEFAULT_LATTICE_SIZE;
+	if(latticeSize == 0) latticeSize = defaults.latticeSize;
 
 	_float latticeWidth = 0;
 	if(argSet(latticeWidthOption)) {
 		latticeWidth = (_float)(atof(latticeWidthOption));
 	}
-	if(latticeWidth <= 0) latticeWidth = DEFAULT_LATTICE_WIDTH;
+	if(latticeWidth <= 0) latticeWidth = defaults.latticeWidth;
 
 	_float timestep = 0;
 	if(argSet(timestepOption)) {
 		timestep = (_float)(atof(timestepOption));
 	}
-	if(timestep <= 0) timestep = DEFAULT_TIMESTEP;
+	if(timestep <= 0) timestep = defaults.timestep;
 
 	_float waveWidth = 0;
 	if(argSet(waveWidthOption)) {
 		waveWidth = (_float)(atof(waveWidthOption));
 	}
-	if(waveWidth <= 0) waveWidth = DEFAULT_WAVE_WIDTH;
+	if(waveWidth <= 0) waveWidth = defaults.waveWidth;
 
 	int waveWrite = 0;
 	if(argSet(waveWriteOption)) {
 		waveWrite = atoi(waveWriteOption);
 	}
-	if(waveWrite <= 0) waveWrite = DEFAULT_WAVE_WRITE;
+	if(waveWrite <= 0) waveWrite = defaults.waveWrite;
 
 	// printf("Generating a history of %d lattice states (%f MB)\n",
 	//  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
@@ -98,11 +121,18 @@ int main(int argc, char** argv)
 
 	puts("Setting initial state...");
 	history->initialize(latticeWidth, latticeSize);
-	history->setInitialStatewv(waveWidth); // wave width
+	switch(mode) {
+		case CLASSICAL:
+			history->setInitialStateClassical(waveWidth);
+			break;
+		case SCHRODINGER:
+			history->setInitialStateSchrodinger(waveWidth);
+			break;
+	}
 
 	// Evolve
 
-	printf("Will evolve for %d steps\n", steps);
+	printf("Will evolve for %ld steps\n", steps);
 	puts("Evolving...");
 	printf("Writing every %d evolutions\n", waveWrite);
 
@@ -118,23 +148,53 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	register int i;
+	register long i;
 	for(i=0;i<steps;++i)
 	{
 		next = &(history[1+i]);
 		next->initialize(latticeWidth, latticeSize);
 
-		curr->evolvewv(timestep, next);
+		switch(mode) {
+			default:
+			case SCHRODINGER:
+				curr->evolveSchrodinger(timestep, next);
+				break;
+			case CLASSICAL:
+				curr->evolveClassical(timestep, next);
+				break;
+		}
 
 		if(i % waveWrite == 0) {
-			history[i].writeLatticewv(f);
+			switch(mode) {
+				default:
+				case SCHRODINGER:
+					history[i].writeLatticeSchrodinger(f);
+					break;
+				case CLASSICAL:
+					history[i].writeLatticeClassical(f);
+					break;
+
+			}
 			fprintf(f, "\n");
+		}
+
+		char prob[128];
+		if(mode == SCHRODINGER) {
+			printFloat(prob, curr->prob);
 		}
 
 		delete [] curr->lattice;
 		curr = next;
 
-		printf("\rSteps: %09d (%7.4f%%)", i, (float)i*100.0/steps);
+		switch(mode) {
+			default:
+			case SCHRODINGER:
+				printf("\rSteps: %09ld (%7.4f%%): prob %s", i, (float)i*100.0/steps, prob);
+				break;
+			case CLASSICAL:
+				printf("\rSteps: %09ld (%7.4f%%)", i, (float)i*100.0/steps);
+				break;
+		}
 		fflush(stdout);
 	}
 	printf("\n");
