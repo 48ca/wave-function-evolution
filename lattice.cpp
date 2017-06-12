@@ -18,6 +18,7 @@ Lattice::Lattice(_float const& L, int const& N)
 	lattice = new State[N];
 	prob = 0;
 }
+
 void Lattice::initialize(_float const& L, int const& N)
 {
 	latticeWidth = L;
@@ -25,46 +26,7 @@ void Lattice::initialize(_float const& L, int const& N)
 	lattice = new State[N];
 	prob = 0;
 }
-void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice)
-{
-	register int i;
 
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-	for(i=1; i<latticeSize-1; ++i)
-	{
-		// No potential
-		_complex d2dx2 = lattice[i+1].state.raw + lattice[i-1].state.raw - lattice[i].state.raw * (_complex)2.0;
-		outputLattice->lattice[i].state = Complex(
-				lattice[i].state.re() - dto*Im(d2dx2),
-				lattice[i].state.im() + dto*Re(d2dx2)
-				);
-	}
-	outputLattice->lattice[0].state = Complex(0);
-	outputLattice->lattice[latticeSize-1].state = Complex(0);
-
-	outputLattice->normalize();
-}
-void Lattice::evolveClassical(_float const& dto, Lattice* const& outputLattice)
-{
-	register int i;
-	//register _float delxsq = (latticeWidth/((_float)(latticeSize)))*(latticeWidth/((_float)(latticeSize)));
-
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-	for(i=1; i<latticeSize-1; ++i)
-	{
-		_float d2dx2 = (lattice[i+1].wave.phi + lattice[i-1].wave.phi - lattice[i].wave.phi * 2);
-		outputLattice->lattice[i].wave.phi = lattice[i].wave.phi + 1.0 * dto * lattice[i].wave.derivative;
-		outputLattice->lattice[i].wave.derivative = lattice[i].wave.derivative + 1.0 * dto * d2dx2;
-	}
-	outputLattice->lattice[0].wave.phi = 0;
-	outputLattice->lattice[latticeSize-1].wave.phi = 0;
-	outputLattice->lattice[0].wave.derivative = 0;
-	outputLattice->lattice[latticeSize-1].wave.derivative = 0;
-}
 void Lattice::normalize()
 {
 	this->probability();
@@ -93,6 +55,12 @@ Lattice::~Lattice()
 {
 	delete [] lattice;
 }
+
+
+/*********************
+ **** SCHRODINGER ****
+ ********************/
+
 void Lattice::setInitialStateSchrodinger(_float dx)
 {
 	register int i;
@@ -116,6 +84,66 @@ void Lattice::setInitialStateSchrodinger(_float dx)
 
 	this->normalize();
 }
+
+void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice)
+{
+	register int i;
+
+#ifdef USING_OPENMP
+#pragma omp parallel for
+#endif
+	for(i=1; i<latticeSize-1; ++i)
+	{
+		// No potential
+		_complex d2dx2 = lattice[i+1].state.raw + lattice[i-1].state.raw - lattice[i].state.raw * (_complex)2.0;
+		outputLattice->lattice[i].state = Complex(
+				lattice[i].state.re() - dto*Im(d2dx2),
+				lattice[i].state.im() + dto*Re(d2dx2)
+				);
+	}
+	outputLattice->lattice[0].state = Complex(0);
+	outputLattice->lattice[latticeSize-1].state = Complex(0);
+
+	outputLattice->normalize();
+}
+
+int Lattice::writeLatticeSchrodinger(FILE* f)
+{
+	register int i;
+	for(i=0;i<latticeSize-1;++i)
+	{
+		lattice[i].state.printCompact(f);
+		fprintf(f,",");
+	}
+	lattice[latticeSize-1].state.printCompact(f);
+	return 0;
+}
+
+
+/*********************
+ ***** CLASSICAL *****
+ ********************/
+
+void Lattice::evolveClassical(_float const& dto, Lattice* const& outputLattice)
+{
+	register int i;
+	//register _float delxsq = (latticeWidth/((_float)(latticeSize)))*(latticeWidth/((_float)(latticeSize)));
+
+#ifdef USING_OPENMP
+#pragma omp parallel for
+#endif
+	for(i=1; i<latticeSize-1; ++i)
+	{
+		_float d2dx2 = (lattice[i+1].wave.phi + lattice[i-1].wave.phi - lattice[i].wave.phi * 2);
+		outputLattice->lattice[i].wave.phi = lattice[i].wave.phi + 1.0 * dto * lattice[i].wave.derivative;
+		outputLattice->lattice[i].wave.derivative = lattice[i].wave.derivative + 1.0 * dto * d2dx2;
+	}
+	outputLattice->lattice[0].wave.phi = 0;
+	outputLattice->lattice[latticeSize-1].wave.phi = 0;
+	outputLattice->lattice[0].wave.derivative = 0;
+	outputLattice->lattice[latticeSize-1].wave.derivative = 0;
+}
+
 void Lattice::setInitialStateClassical(_float dx)
 {
 	register int i;
@@ -138,17 +166,7 @@ void Lattice::setInitialStateClassical(_float dx)
 	lattice[0].wave.derivative = 0;
 	lattice[latticeSize-1].wave.derivative = 0;
 }
-int Lattice::writeLatticeSchrodinger(FILE* f)
-{
-	register int i;
-	for(i=0;i<latticeSize-1;++i)
-	{
-		lattice[i].state.printCompact(f);
-		fprintf(f,",");
-	}
-	lattice[latticeSize-1].state.printCompact(f);
-	return 0;
-}
+
 int Lattice::writeLatticeClassical(FILE* f)
 {
 	register int i;
