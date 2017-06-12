@@ -149,6 +149,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	fprintf(f, "--- mode;%s;---\n", mode == SCHRODINGER ? "schrodinger" : "classical");
 	register long i;
 	for(i=0;i<steps;++i)
 	{
