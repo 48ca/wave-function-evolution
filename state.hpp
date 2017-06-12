@@ -5,14 +5,20 @@
 
 // acts as both schrodinger and classical state
 
+typedef struct wave {
+	_float phi;
+	_float derivative;
+} Wave;
+
 class State
 {
 	public:
-		Complex state;
 		State();
 		_float prob();
 
-		_float phi;
-		_float derivative;
+		union {
+			Complex state;
+			Wave wave;
+		};
 };
 #endif //state. i guess.

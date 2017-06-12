@@ -56,14 +56,14 @@ void Lattice::evolvewv(_float const& dto, Lattice* const& outputLattice)
 #endif
 	for(i=1; i<latticeSize-1; ++i)
 	{
-		_float d2dx2 = (lattice[i+1].phi + lattice[i-1].phi - lattice[i].phi * 2);
-		outputLattice->lattice[i].phi = lattice[i].phi + 1.0 * dto * lattice[i].derivative;
-		outputLattice->lattice[i].derivative = lattice[i].derivative + 1.0 * dto * d2dx2;
+		_float d2dx2 = (lattice[i+1].wave.phi + lattice[i-1].wave.phi - lattice[i].wave.phi * 2);
+		outputLattice->lattice[i].wave.phi = lattice[i].wave.phi + 1.0 * dto * lattice[i].wave.derivative;
+		outputLattice->lattice[i].wave.derivative = lattice[i].wave.derivative + 1.0 * dto * d2dx2;
 	}
-	outputLattice->lattice[0].phi = 0;
-	outputLattice->lattice[latticeSize-1].phi = 0;
-	outputLattice->lattice[0].derivative = 0;
-	outputLattice->lattice[latticeSize-1].derivative = 0;
+	outputLattice->lattice[0].wave.phi = 0;
+	outputLattice->lattice[latticeSize-1].wave.phi = 0;
+	outputLattice->lattice[0].wave.derivative = 0;
+	outputLattice->lattice[latticeSize-1].wave.derivative = 0;
 }
 void Lattice::normalize()
 {
@@ -127,16 +127,16 @@ void Lattice::setInitialStatewv(_float dx)
 	{
 		_float x0 = (_float)(latticeWidth)/2;
 		_float x = (_float)(i) * latticeWidth/(_float)(latticeSize);
-		_float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx)));
+		_float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx)));
 		// _float phi = Re(Sin(PI*(x-x0)));
-		_float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2 * dx * dx) ));
-		lattice[i].phi = phi;
-		lattice[i].derivative = derivative;
+		_float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx) ));
+		lattice[i].wave.phi = phi;
+		lattice[i].wave.derivative = derivative;
 	}
-	lattice[0].phi = 0;
-	lattice[latticeSize-1].phi = 0;
-	lattice[0].derivative = 0;
-	lattice[latticeSize-1].derivative = 0;
+	lattice[0].wave.phi = 0;
+	lattice[latticeSize-1].wave.phi = 0;
+	lattice[0].wave.derivative = 0;
+	lattice[latticeSize-1].wave.derivative = 0;
 }
 int Lattice::writeLattice(FILE* f)
 {
@@ -155,14 +155,14 @@ int Lattice::writeLatticewv(FILE* f)
 	char buf[128];
 	for(i=0;i<latticeSize-1;++i)
 	{
-		printFloat(buf, lattice[i].phi);
+		printFloat(buf, lattice[i].wave.phi);
 		fprintf(f,"%s;",buf);
-		printFloat(buf, lattice[i].derivative);
+		printFloat(buf, lattice[i].wave.derivative);
 		fprintf(f,"%s,",buf);
 	}
-	printFloat(buf, lattice[latticeSize-1].phi);
+	printFloat(buf, lattice[latticeSize-1].wave.phi);
 	fprintf(f,"%s;",buf);
-	printFloat(buf, lattice[latticeSize-1].derivative);
+	printFloat(buf, lattice[latticeSize-1].wave.derivative);
 	fprintf(f,"%s,",buf);
 	return 0;
 }
