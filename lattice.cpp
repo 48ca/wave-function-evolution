@@ -91,6 +91,7 @@ void Lattice::setInitialStateSchrodinger(_float dx)
 void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
+	time += dto;
 
 #ifdef USING_OPENMP
 #pragma omp parallel for
@@ -131,6 +132,7 @@ void Lattice::evolveClassical(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
 	energy = 0;
+	time += dto;
 	//register _float delxsq = (latticeWidth/((_float)(latticeSize)))*(latticeWidth/((_float)(latticeSize)));
 
 #ifdef USING_OPENMP
