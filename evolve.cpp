@@ -195,9 +195,15 @@ int main(int argc, char** argv)
 			fprintf(f, "\n");
 		}
 
-		char prob[128];
-		if(mode == SCHRODINGER) {
-			printFloat(prob, curr->prob);
+		char constant[128];
+		switch(mode) {
+			default:
+			case SCHRODINGER:
+				printFloat(constant, curr->prob);
+				break;
+			case CLASSICAL:
+				printFloat(constant, curr->energy);
+				break;
 		}
 
 		delete [] curr->lattice;
@@ -206,10 +212,10 @@ int main(int argc, char** argv)
 		switch(mode) {
 			default:
 			case SCHRODINGER:
-				printf("\rSteps: %09ld (%7.4f%%): prob %s", i, (float)i*100.0/steps, prob);
+				printf("\rSteps: %09ld (%7.4f%%): prob %s", i, (float)i*100.0/steps, constant);
 				break;
 			case CLASSICAL:
-				printf("\rSteps: %09ld (%7.4f%%)", i, (float)i*100.0/steps);
+				printf("\rSteps: %09ld (%7.4f%%): energy %s", i, (float)i*100.0/steps, constant);
 				break;
 		}
 		fflush(stdout);

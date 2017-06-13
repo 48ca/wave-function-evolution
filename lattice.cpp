@@ -10,6 +10,7 @@ Lattice::Lattice()
 	latticeSize = 0;
 	lattice = NULL;
 	prob = 0;
+	time = 0;
 }
 Lattice::Lattice(_float const& L, int const& N)
 {
@@ -17,6 +18,7 @@ Lattice::Lattice(_float const& L, int const& N)
 	latticeSize = N;
 	lattice = new State[N];
 	prob = 0;
+	time = 0;
 }
 
 void Lattice::initialize(_float const& L, int const& N)
@@ -25,6 +27,7 @@ void Lattice::initialize(_float const& L, int const& N)
 	latticeSize = N;
 	lattice = new State[N];
 	prob = 0;
+	time = 0;
 }
 
 void Lattice::normalize()
@@ -127,6 +130,7 @@ int Lattice::writeLatticeSchrodinger(FILE* f)
 void Lattice::evolveClassical(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
+	energy = 0;
 	//register _float delxsq = (latticeWidth/((_float)(latticeSize)))*(latticeWidth/((_float)(latticeSize)));
 
 #ifdef USING_OPENMP
@@ -137,6 +141,10 @@ void Lattice::evolveClassical(_float const& dto, Lattice* const& outputLattice)
 		_float d2dx2 = (lattice[i+1].wave.phi + lattice[i-1].wave.phi - lattice[i].wave.phi * 2);
 		outputLattice->lattice[i].wave.phi = lattice[i].wave.phi + 1.0 * dto * lattice[i].wave.derivative;
 		outputLattice->lattice[i].wave.derivative = lattice[i].wave.derivative + 1.0 * dto * d2dx2;
+		if(!(i==1)) {
+			energy += (outputLattice->lattice[i].wave.derivative)*(outputLattice->lattice[i].wave.derivative)
+			+ (outputLattice->lattice[i].wave.phi - outputLattice->lattice[i-1].wave.phi)*(outputLattice->lattice[i].wave.phi - outputLattice->lattice[i-1].wave.phi);
+		}
 	}
 	outputLattice->lattice[0].wave.phi = 0;
 	outputLattice->lattice[latticeSize-1].wave.phi = 0;

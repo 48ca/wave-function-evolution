@@ -24,6 +24,8 @@ class Lattice
 
 		_float latticeWidth;
 		_float prob;
+		_float time;
+		_float energy;
 
 		void normalize();
 		void probability();
