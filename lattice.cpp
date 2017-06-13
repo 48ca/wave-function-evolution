@@ -195,13 +195,18 @@ void Lattice::setInitialStateClassical(_float dx)
 #endif
 	for(i=1;i<latticeSize-1;++i)
 	{
-		_float x0 = (_float)(latticeWidth)/2;
 		_float x = (_float)(i) * latticeWidth/(_float)(latticeSize);
-		_float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx)));
-		// _float phi = Re(Sin(PI*(x-x0)));
-		_float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx) ));
-		lattice[i].wave.phi = phi;
-		lattice[i].wave.derivative = derivative;
+
+		// Mover
+		// _float x0 = (_float)(latticeWidth)/2;
+		// _float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx)));
+		// _float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx) ));
+		// lattice[i].wave.phi = phi;
+		// lattice[i].wave.derivative = derivative;
+		//
+		// Standing
+		lattice[i].wave.phi = 10 * Re(Cos(3 * PI * x / latticeWidth));
+		lattice[i].wave.derivative = 0;
 	}
 	lattice[0].wave.phi = 0;
 	lattice[latticeSize-1].wave.phi = 0;
