@@ -36,6 +36,7 @@ class Lattice
 		void setInitialStateSchrodinger(_float);
 		void setInitialStateSchrodingerEigenstate(_float);
 		void setInitialStateClassical(_float);
+		void setInitialStateClassicalStanding(_float);
 
 		int writeLatticeSchrodinger(FILE* f);
 		int writeLatticeClassical(FILE* f);

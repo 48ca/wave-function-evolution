@@ -19,6 +19,9 @@ echo "" && echo ""
 echo "" && echo ""
 # Classical
 ./evolvewv
+echo "" && echo ""
+# Classical standing
+./evolvewv -cs
 
 set +e
 
@@ -39,6 +42,12 @@ echo "" && echo ""
 echo "Plotting classical..."
 
 ./plot.py ../outwv.txt
+
+echo "" && echo ""
+
+echo "Plotting classical standing..."
+
+./plot.py ../outwvs.txt
 cd ..
 
 echo "Done"

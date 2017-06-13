@@ -197,15 +197,30 @@ void Lattice::setInitialStateClassical(_float dx)
 	{
 		_float x = (_float)(i) * latticeWidth/(_float)(latticeSize);
 
-		// Mover
-		// _float x0 = (_float)(latticeWidth)/2;
-		// _float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx)));
-		// _float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx) ));
-		// lattice[i].wave.phi = phi;
-		// lattice[i].wave.derivative = derivative;
-		//
-		// Standing
-		lattice[i].wave.phi = 10 * Re(Cos(3 * PI * x / latticeWidth));
+		_float x0 = (_float)(latticeWidth)/2;
+		_float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx)));
+		_float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx) ));
+		lattice[i].wave.phi = phi;
+		lattice[i].wave.derivative = derivative;
+	}
+	lattice[0].wave.phi = 0;
+	lattice[latticeSize-1].wave.phi = 0;
+	lattice[0].wave.derivative = 0;
+	lattice[latticeSize-1].wave.derivative = 0;
+}
+
+void Lattice::setInitialStateClassicalStanding(_float dx)
+{
+	register int i;
+
+#ifdef USING_OPENMP
+#pragma omp parallel for
+#endif
+	for(i=1;i<latticeSize-1;++i)
+	{
+		_float x = (_float)(i) * latticeWidth/(_float)(latticeSize);
+
+		lattice[i].wave.phi = Re(Sin(3 * PI * x / latticeWidth));
 		lattice[i].wave.derivative = 0;
 	}
 	lattice[0].wave.phi = 0;

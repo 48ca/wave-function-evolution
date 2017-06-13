@@ -44,11 +44,11 @@ def classical(r):
     print("\rProgress: done         ")
 
     fig, ax = plt.subplots()
-    fig.patch.set_facecolor('black')
+    #fig.patch.set_facecolor('black')
     ax.set_ylim(-2.5, 2.5)
-    ax.set_facecolor('black')
-    vl, = ax.plot(hist['vl'][0], 'o', ms=.75)
-    dt, = ax.plot(hist['dt'][0], 'o', ms=.75)
+    #ax.set_facecolor('black')
+    vl, = ax.plot(hist['vl'][0], 'o', ms=4)
+    dt, = ax.plot(hist['dt'][0], 'o', ms=4)
     def update(data):
         vl.set_ydata(hist['vl'][data])
         dt.set_ydata(hist['dt'][data])
@@ -80,12 +80,12 @@ def schrodinger(r):
     print("\rProgress: done         ")
 
     fig, ax = plt.subplots()
-    fig.patch.set_facecolor('black')
+    #fig.patch.set_facecolor('black')
     ax.set_ylim(-1.5, 1.5)
-    ax.set_facecolor('black')
-    re, = ax.plot(hist['re'][0], 'o', ms=.75)
-    im, = ax.plot(hist['im'][0], 'o', ms=.75)
-    pr, = ax.plot(hist['pr'][0], 'o', ms=.75)
+    #ax.set_facecolor('black')
+    re, = ax.plot(hist['re'][0], 'o', ms=3)
+    im, = ax.plot(hist['im'][0], 'o', ms=3)
+    pr, = ax.plot(hist['pr'][0], 'o', ms=3)
     def update(data):
         re.set_ydata(hist['re'][data])
         im.set_ydata(hist['im'][data])

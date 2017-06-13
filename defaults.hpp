@@ -4,6 +4,7 @@
 #define SCHRODINGER 1
 #define CLASSICAL 2
 #define SCHRODINGER_EIGENSTATE 3
+#define CLASSICAL_STANDING 4
 
 struct defaults {
 	long steps;
@@ -30,14 +31,24 @@ void generateDefaults(int mode)
 			defaults.waveWrite = 300;
 			break;
 
-		case CLASSICAL:
+		case CLASSICAL_STANDING:
+			defaults.outFile = (char*)"outwvs.txt";
 			defaults.steps = 1000000;
-			defaults.latticeSize = 250;
-			defaults.latticeWidth = 15.0;
-			defaults.waveWidth = 1.0;
-			defaults.outFile = (char*)"outwv.txt";
+			defaults.latticeSize = 1000;
+			defaults.latticeWidth = 1000;
+			defaults.waveWidth = 50;
 			defaults.timestep = 0.001;
-			defaults.waveWrite = 500;
+			defaults.waveWrite = 5000;
+			break;
+
+		case CLASSICAL:
+			defaults.outFile = (char*)"outwv.txt";
+			defaults.steps = 1000000;
+			defaults.latticeSize = 1000;
+			defaults.latticeWidth = 1000;
+			defaults.waveWidth = 50;
+			defaults.timestep = 0.001;
+			defaults.waveWrite = 5000;
 			break;
 
 		case SCHRODINGER_EIGENSTATE:

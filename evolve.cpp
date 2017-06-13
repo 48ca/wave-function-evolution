@@ -22,6 +22,7 @@ int main(int argc, char** argv)
 	char* timestepOption     = addArgument((char*)"Timestep", TAKES_ONE_ARGUMENT, (char*)"-t", (char*)"--timestep");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
 	char* eigenstateOption   = addArgument((char*)"Set eigenstate initialization", TAKES_NO_ARGUMENTS, (char*)"-e", (char*)"--eigen");
+	char* standingOption     = addArgument((char*)"Set classical to standing", TAKES_NO_ARGUMENTS, (char*)"-cs",(char*)"--stand");
 	char* modeOption         = addArgument((char*)"Mode option", TAKES_ONE_ARGUMENT, (char*)"-m", (char*)"--mode");
 
 	int mode = SCHRODINGER;
@@ -52,10 +53,16 @@ int main(int argc, char** argv)
 			mode = CLASSICAL;
 	}
 
-	if(mode == SCHRODINGER) {
-		if(argSet(eigenstateOption)) {
-			mode = SCHRODINGER_EIGENSTATE;
-		}
+	if(argSet(eigenstateOption) && argSet(standingOption)) {
+		puts("The eigenstate and classical standing wave options have been set...?");
+		return 1;
+	}
+
+	if(argSet(eigenstateOption)) {
+		mode = SCHRODINGER_EIGENSTATE;
+	}
+	else if(argSet(standingOption)) {
+		mode = CLASSICAL_STANDING;
 	}
 
 	switch(mode) {
@@ -68,6 +75,9 @@ int main(int argc, char** argv)
 			break;
 		case CLASSICAL:
 			puts("Running classical...");
+			break;
+		case CLASSICAL_STANDING:
+			puts("Running classical standing...");
 			break;
 	}
 
@@ -139,6 +149,9 @@ int main(int argc, char** argv)
 		case CLASSICAL:
 			history->setInitialStateClassical(waveWidth);
 			break;
+		case CLASSICAL_STANDING:
+			history->setInitialStateClassicalStanding(waveWidth);
+			break;
 		case SCHRODINGER:
 			history->setInitialStateSchrodinger(waveWidth);
 			break;
@@ -193,6 +206,7 @@ int main(int argc, char** argv)
 				curr->evolveSchrodinger(timestep, next);
 				break;
 			case CLASSICAL:
+			case CLASSICAL_STANDING:
 				curr->evolveClassical(timestep, next);
 				break;
 		}
@@ -205,6 +219,7 @@ int main(int argc, char** argv)
 					history[i].writeLatticeSchrodinger(f);
 					break;
 				case CLASSICAL:
+				case CLASSICAL_STANDING:
 					history[i].writeLatticeClassical(f);
 					break;
 
@@ -220,6 +235,7 @@ int main(int argc, char** argv)
 				printFloat(constant, curr->prob);
 				break;
 			case CLASSICAL:
+			case CLASSICAL_STANDING:
 				printFloat(constant, curr->energy);
 				break;
 		}
@@ -234,6 +250,7 @@ int main(int argc, char** argv)
 				printf("\rSteps: %09ld (%7.4f%%): prob %s", i, (float)i*100.0/steps, constant);
 				break;
 			case CLASSICAL:
+			case CLASSICAL_STANDING:
 				printf("\rSteps: %09ld (%7.4f%%): energy %s", i, (float)i*100.0/steps, constant);
 				break;
 		}
