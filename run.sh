@@ -6,7 +6,7 @@ pushd $DIR > /dev/null
 set -e
 
 echo "Compiling..."
-cmake .
+cmake . -DNO_QUADMATH=True -DNO_OPENMP=True
 make
 
 echo "##############################################"
