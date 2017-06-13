@@ -45,8 +45,8 @@ def classical(r):
 
     fig, ax = plt.subplots()
     ax.set_ylim(-75, 75)
-    vl, = ax.plot(hist['vl'][0])
-    dt, = ax.plot(hist['dt'][0])
+    vl, = ax.plot(hist['vl'][0], 'o', ms=.75)
+    dt, = ax.plot(hist['dt'][0], 'o', ms=.75)
     def update(data):
         vl.set_ydata(hist['vl'][data])
         dt.set_ydata(hist['dt'][data])
@@ -79,9 +79,9 @@ def schrodinger(r):
 
     fig, ax = plt.subplots()
     ax.set_ylim(-1.5, 1.5)
-    re, = ax.plot(hist['re'][0])
-    im, = ax.plot(hist['im'][0])
-    pr, = ax.plot(hist['pr'][0])
+    re, = ax.plot(hist['re'][0], 'o', ms=.75)
+    im, = ax.plot(hist['im'][0], 'o', ms=.75)
+    pr, = ax.plot(hist['pr'][0], 'o', ms=.75)
     def update(data):
         re.set_ydata(hist['re'][data])
         im.set_ydata(hist['im'][data])
