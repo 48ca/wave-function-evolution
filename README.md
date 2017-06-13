@@ -4,6 +4,8 @@ Execute `cmake .` in the root of the project to generate the Makefile.
 To compile the code, run `make`.  
 The binary produced is `evolve` and symlinks are created to alias `-m` switches. `evolvequ` behaves like `evolve -m s`, and `evolvewv` behaves like `evolve -m c`.  
 To install the code for the entire system, run `make install` after running `make`.
+### Automatically running everything
+You can use `run.sh` to run and plot everything. It does Schrodinger, then Schrodinger eigenstates, classical, and classical standing wave in that order. Then it automatically plots them assuming `./plot/install_plot.sh` has already been run.
 ## Post-installation
 To clean CMake installation files, you can use `clean_cmake.sh`.
 ## Options
