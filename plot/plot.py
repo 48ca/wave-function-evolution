@@ -27,20 +27,24 @@ numlines = 0
 def classical(r):
     hist = {
         'vl': [],
-        'dt': []
+        'dt': [],
+	'en': []
     }
     for i, row in enumerate(r):
         if i == 0: continue
         sys.stdout.write("\rProgress: {0:6.4f}%".format(100.0 * i/numlines))
-        for t in ['vl', 'dt']:
+        for t in ['vl', 'dt', 'en']:
             hist[t].append([])
+        pr = 0
         for c in row:
             if c == "": continue
             cstr = c.split(";")
-            vl = cstr[0]
-            dt = cstr[1]
+            vl = float(cstr[0])
+            dt = float(cstr[1])
             hist['vl'][-1].append(vl)
-            hist['dt'][-1].append(dt)
+            hist['dt'][-1].append(25 * dt)
+            hist['en'][-1].append(1000 * (dt*dt+(vl-pr)*(vl-pr)))
+            pr = vl
     print("\rProgress: done         ")
 
     fig, ax = plt.subplots()
@@ -49,9 +53,11 @@ def classical(r):
     #ax.set_facecolor('black')
     vl, = ax.plot(hist['vl'][0], 'o', ms=4)
     dt, = ax.plot(hist['dt'][0], 'o', ms=4)
+    en, = ax.plot(hist['en'][0], 'o', ms=4)
     def update(data):
         vl.set_ydata(hist['vl'][data])
         dt.set_ydata(hist['dt'][data])
+        en.set_ydata(hist['en'][data])
     ani = animation.FuncAnimation(fig, update, np.arange(0, len(hist['vl'])), interval=1)
     plt.show()
 
