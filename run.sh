@@ -14,6 +14,9 @@ echo "##############################################"
 # Schrodinger
 ./evolvequ
 echo "" && echo ""
+./evolvequ -e
+# Eigenstate
+echo "" && echo ""
 # Classical
 ./evolvewv
 
@@ -25,6 +28,11 @@ echo "Plotting schrodinger..."
 echo "  use ^\ to quit"
 cd plot
 ./plot.py ../outqu.txt
+
+echo "" && echo ""
+
+echo "Plotting schrodinger eigenstate..."
+./plot.py ../outque.txt
 
 echo "" && echo ""
 
