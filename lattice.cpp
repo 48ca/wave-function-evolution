@@ -93,6 +93,10 @@ void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice
 	register int i;
 	time += dto;
 
+	_float C = .0000001;
+
+#define V(i) ((i < 3*latticeSize/4) ? 0 : 9999999)
+
 #ifdef USING_OPENMP
 #pragma omp parallel for
 #endif
@@ -101,8 +105,8 @@ void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice
 		// No potential
 		_complex d2dx2 = lattice[i+1].state.raw + lattice[i-1].state.raw - lattice[i].state.raw * (_complex)2.0;
 		outputLattice->lattice[i].state = Complex(
-				lattice[i].state.re() - dto*Im(d2dx2),
-				lattice[i].state.im() + dto*Re(d2dx2)
+				lattice[i].state.re() - dto*Im(d2dx2) - dto * C * V(i) * lattice[i].state.im(),
+				lattice[i].state.im() + dto*Re(d2dx2) - dto * C * V(i) * lattice[i].state.re()
 				);
 	}
 	outputLattice->lattice[0].state = Complex(0);
