@@ -63,10 +63,7 @@ int main(int argc, char** argv)
 
 	// Now we start real command line argument parsing
 
-	if(argSet(outputFilename)) {
-		// Output specified
-		printf("Writing output to %s\n", outputFilename);
-	} else {
+	if(!argSet(outputFilename)) {
 		free(outputFilename);
 		outputFilename = defaults.outFile;
 	}
@@ -111,9 +108,14 @@ int main(int argc, char** argv)
 	// printf("Generating a history of %d lattice states (%f MB)\n",
 	//  steps, ((float)((sizeof(Lattice)+latticeSize*(sizeof(State)+sizeof(Complex))) * steps))/(1e6));
 
-	Lattice* history = new Lattice[steps + 1];
+	free(waveWriteOption);
+	free(waveWidthOption);
+	free(timestepOption);
+	free(latticeWidthOption);
+	free(latticeSizeOption);
+	free(historySizeOption);
 
-	puts("Finished allocating memory");
+	Lattice* history = new Lattice[steps + 1];
 
 	// Initialize
 
@@ -133,8 +135,6 @@ int main(int argc, char** argv)
 	// Evolve
 
 	printf("Will evolve for %ld steps\n", steps);
-	puts("Evolving...");
-	printf("Writing to %s\n", outputFilename);
 	printf("Writing every %d evolutions\n", waveWrite);
 
 	Lattice* curr = &(history[0]);
@@ -148,6 +148,8 @@ int main(int argc, char** argv)
 		fprintf(stderr, "Cannot write to %s\n", outputFilename);
 		return 1;
 	}
+
+	printf("Writing to %s\n", outputFilename);
 
 	fprintf(f, "--- mode;%s;options;", mode == SCHRODINGER ? "schrodinger" : "classical");
 	fprintf(f,"n:%ld;", steps);
