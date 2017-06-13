@@ -148,6 +148,8 @@ void Lattice::setInitialStateClassical(_float dx)
 {
 	register int i;
 
+	_float c = 0.00985;
+
 #ifdef USING_OPENMP
 #pragma omp parallel for
 #endif
@@ -157,7 +159,7 @@ void Lattice::setInitialStateClassical(_float dx)
 		_float x = (_float)(i) * latticeWidth/(_float)(latticeSize);
 		_float phi = Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx)));
 		// _float phi = Re(Sin(PI*(x-x0)));
-		_float derivative = (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx) ));
+		_float derivative = c * (x - x0) / (dx * dx) * Re(Exp(0 - (x - x0)*(x - x0) / (2.0 * dx * dx) ));
 		lattice[i].wave.phi = phi;
 		lattice[i].wave.derivative = derivative;
 	}

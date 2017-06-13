@@ -44,7 +44,7 @@ def classical(r):
     print("\rProgress: done         ")
 
     fig, ax = plt.subplots()
-    ax.set_ylim(-75, 75)
+    ax.set_ylim(-2, 2)
     vl, = ax.plot(hist['vl'][0], 'o', ms=.75)
     dt, = ax.plot(hist['dt'][0], 'o', ms=.75)
     def update(data):
