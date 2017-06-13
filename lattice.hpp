@@ -34,6 +34,7 @@ class Lattice
 		void evolveClassical(_float const& dto, Lattice* const& outputLattice);
 
 		void setInitialStateSchrodinger(_float);
+		void setInitialStateSchrodingerEigenstate(_float);
 		void setInitialStateClassical(_float);
 
 		int writeLatticeSchrodinger(FILE* f);

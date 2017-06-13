@@ -7,8 +7,8 @@
 
 #include <complex>
 
-typedef std::complex<long double> _complex;
-typedef long double _float;
+typedef std::complex<double> _complex;
+typedef double _float;
 
 #define Re(Z) std::real(Z)
 #define Im(Z) std::imag(Z)

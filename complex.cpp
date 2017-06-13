@@ -82,7 +82,7 @@ void Complex::print() const
 
 #ifndef USING_QUADMATH
 
-	printf("%.20Le + %.20Lei\n", Re(raw), Im(raw));
+	printf("%.20e + %.20ei\n", Re(raw), Im(raw));
 
 #else
 
@@ -103,7 +103,7 @@ void Complex::printReal() const
 
 #ifndef USING_QUADMATH
 
-	printf("%.20Le\n", Re(raw));
+	printf("%.20e\n", Re(raw));
 
 #else
 
@@ -122,7 +122,7 @@ void printFloat(char* buf, _float f)
 
 #ifndef USING_QUADMATH
 
-	sprintf(buf, "%Le\n", f);
+	sprintf(buf, "%e", f);
 
 #else
 
@@ -139,7 +139,7 @@ void Complex::printCompact(FILE* f) const
 
 #ifndef USING_QUADMATH
 
-	fprintf(f, "%.20Le + %.20Lei", Re(raw), Im(raw));
+	fprintf(f, "%.20e + %.20ei", Re(raw), Im(raw));
 
 #else
 

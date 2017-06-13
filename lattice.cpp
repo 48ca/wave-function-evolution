@@ -88,6 +88,33 @@ void Lattice::setInitialStateSchrodinger(_float dx)
 	this->normalize();
 }
 
+void Lattice::setInitialStateSchrodingerEigenstate(_float dx)
+{
+	register int i;
+
+#ifdef USING_OPENMP
+#pragma omp parallel for
+#endif
+	for(i=1;i<latticeSize-1;++i)
+	{
+		//_float xinit = 125;
+		//_float delta = latticeWidth/latticeSize;
+		_float x = ((_float)(i) - latticeSize/2) * latticeWidth/(_float)(latticeSize);
+		// _float amp = Re(Exp(-1 * (x)*(x) / (2 * dx * dx)));
+
+		_float n = 3;
+		_float k = n * PI / latticeWidth;
+
+		lattice[i].state = Complex(Sqrt(2.0 / latticeWidth) * Cos(k * x));
+		// lattice[i].state = Complex(amp);
+		// lattice[i].state.print();
+	}
+	lattice[0].state = Complex(0);
+	lattice[latticeSize-1].state = Complex(0);
+
+	this->normalize();
+}
+
 void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice)
 {
 	register int i;
@@ -95,7 +122,8 @@ void Lattice::evolveSchrodinger(_float const& dto, Lattice* const& outputLattice
 
 	_float C = .0000001;
 
-#define V(i) ((i < 3*latticeSize/4) ? 0 : 9999999)
+//#define V(i) ((i < 3*latticeSize/4) ? 0 : 9999999)
+#define V(i) 0
 
 #ifdef USING_OPENMP
 #pragma omp parallel for

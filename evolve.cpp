@@ -21,6 +21,7 @@ int main(int argc, char** argv)
 	char* waveWriteOption    = addArgument((char*)"Waves until write", TAKES_ONE_ARGUMENT, (char*)"-u", (char*)"--wuw");
 	char* timestepOption     = addArgument((char*)"Timestep", TAKES_ONE_ARGUMENT, (char*)"-t", (char*)"--timestep");
 	char* helpOption         = addArgument((char*)"Print usage", TAKES_NO_ARGUMENTS, (char*)"-h", (char*)"--help");
+	char* eigenstateOption   = addArgument((char*)"Set eigenstate initialization", TAKES_NO_ARGUMENTS, (char*)"-e", (char*)"--eigen");
 	char* modeOption         = addArgument((char*)"Mode option", TAKES_ONE_ARGUMENT, (char*)"-m", (char*)"--mode");
 
 	int mode = SCHRODINGER;
@@ -44,15 +45,26 @@ int main(int argc, char** argv)
 		if(mode == CLASSICAL) {
 			fprintf(stderr, "Ignoring mode option\n");
 		}
-		if(!strcmp(modeOption, "s") || !strcmp(modeOption, "schrodinger"))
+		if(!strcmp(modeOption, "s") || !strcmp(modeOption, "schrodinger")) {
 			mode = SCHRODINGER;
+		}
 		else if(!strcmp(modeOption, "c") || !strcmp(modeOption, "classical"))
 			mode = CLASSICAL;
 	}
 
+	if(mode == SCHRODINGER) {
+		if(argSet(eigenstateOption)) {
+			mode = SCHRODINGER_EIGENSTATE;
+		}
+	}
+
 	switch(mode) {
+		default:
 		case SCHRODINGER:
 			puts("Running Schrodinger...");
+			break;
+		case SCHRODINGER_EIGENSTATE:
+			puts("Running Schrodinger eigenstate...");
 			break;
 		case CLASSICAL:
 			puts("Running classical...");
@@ -130,6 +142,9 @@ int main(int argc, char** argv)
 		case SCHRODINGER:
 			history->setInitialStateSchrodinger(waveWidth);
 			break;
+		case SCHRODINGER_EIGENSTATE:
+			history->setInitialStateSchrodingerEigenstate(waveWidth);
+			break;
 	}
 
 	// Evolve
@@ -151,7 +166,7 @@ int main(int argc, char** argv)
 
 	printf("Writing to %s\n", outputFilename);
 
-	fprintf(f, "--- mode;%s;options;", mode == SCHRODINGER ? "schrodinger" : "classical");
+	fprintf(f, "--- mode;%s;options;", (mode == SCHRODINGER || mode == SCHRODINGER_EIGENSTATE) ? "schrodinger" : "classical");
 	fprintf(f,"n:%ld;", steps);
 	fprintf(f,"u:%d;", waveWrite);
 	fprintf(f,"o:%s;", outputFilename);
@@ -174,6 +189,7 @@ int main(int argc, char** argv)
 		switch(mode) {
 			default:
 			case SCHRODINGER:
+			case SCHRODINGER_EIGENSTATE:
 				curr->evolveSchrodinger(timestep, next);
 				break;
 			case CLASSICAL:
@@ -185,6 +201,7 @@ int main(int argc, char** argv)
 			switch(mode) {
 				default:
 				case SCHRODINGER:
+				case SCHRODINGER_EIGENSTATE:
 					history[i].writeLatticeSchrodinger(f);
 					break;
 				case CLASSICAL:
@@ -199,6 +216,7 @@ int main(int argc, char** argv)
 		switch(mode) {
 			default:
 			case SCHRODINGER:
+			case SCHRODINGER_EIGENSTATE:
 				printFloat(constant, curr->prob);
 				break;
 			case CLASSICAL:
@@ -212,6 +230,7 @@ int main(int argc, char** argv)
 		switch(mode) {
 			default:
 			case SCHRODINGER:
+			case SCHRODINGER_EIGENSTATE:
 				printf("\rSteps: %09ld (%7.4f%%): prob %s", i, (float)i*100.0/steps, constant);
 				break;
 			case CLASSICAL:
