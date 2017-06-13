@@ -30,10 +30,10 @@ void generateDefaults(int mode)
 			break;
 
 		case CLASSICAL:
-			defaults.steps = 100000;
+			defaults.steps = 1000000;
 			defaults.latticeSize = 1000;
-			defaults.latticeWidth = 10.0;
-			defaults.waveWidth = .6;
+			defaults.latticeWidth = 1000.0;
+			defaults.waveWidth = 50.0;
 			defaults.outFile = (char*)"outwv.txt";
 			defaults.timestep = 0.01;
 			defaults.waveWrite = 500;
