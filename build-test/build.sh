@@ -1,7 +1,6 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-pushd $DIR > /dev/null
+pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 
 build() {
 	echo -e "\e[96mBuilding with $2... \e[0m "

@@ -1,8 +1,6 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-pushd $DIR > /dev/null
+pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 
 if [ -d venv ]
 then
